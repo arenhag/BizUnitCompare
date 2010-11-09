@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Threading;
 using BizUnit;
+using System.Globalization;
 
 namespace BizUnitCompare
 {
@@ -9,7 +10,7 @@ namespace BizUnitCompare
 	{
 		internal static string GetFoundFilePath(Context context, BizUnitCompareConfiguration configuration)
 		{
-			context.LogInfo("Waiting for file (in: {0}) for {1} seconds.", configuration.SearchDirectory, configuration.Timeout/1000);
+			context.LogInfo(string.Format(CultureInfo.CurrentCulture, "Waiting for file (in: {0}) for {1} seconds.", configuration.SearchDirectory, configuration.Timeout / 1000));
 			DateTime endTime = DateTime.Now.AddMilliseconds(configuration.Timeout);
 
 			bool fileFound = false;
@@ -25,15 +26,15 @@ namespace BizUnitCompare
 						string fileData;
 						using (FileStream testFileStream = File.Open(files[0], FileMode.Open, FileAccess.Read, FileShare.Read))
 						{
-							using (StreamReader blaha = new StreamReader(testFileStream))
+							using (StreamReader testFileStreamReader = new StreamReader(testFileStream))
 							{
-								fileData = blaha.ReadToEnd();
+								fileData = testFileStreamReader.ReadToEnd();
 							}
 
 							// it might be tempting to try to load the found file into an XmlDocument here,
 							// but the user might have configured replacements which will turn an invalid document into a valid XML.
 						}
-						context.LogInfo("File found: {0}", files[0]);
+						context.LogInfo(string.Format(CultureInfo.CurrentCulture, "File found: {0}", files[0]));
 						context.LogInfo(fileData);
 						foundFilePath = files[0];
 						fileFound = true;
@@ -50,7 +51,7 @@ namespace BizUnitCompare
 
 			if (!fileFound)
 			{
-				throw new ApplicationException(string.Format(("No files found in {0} within the given timeout ({1})"), configuration.SearchDirectory, configuration.Timeout));
+				throw new ApplicationException(string.Format(CultureInfo.CurrentCulture, "No files found in {0} within the given timeout ({1})", configuration.SearchDirectory, configuration.Timeout));
 			}
 			return foundFilePath;
 		}

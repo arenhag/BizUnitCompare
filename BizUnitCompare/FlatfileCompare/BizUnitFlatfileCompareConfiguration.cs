@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Xml;
 using BizUnit;
+using System.Globalization;
 
 namespace BizUnitCompare.FlatfileCompare
 {
@@ -72,8 +73,8 @@ namespace BizUnitCompare.FlatfileCompare
 					foreach (XmlNode positionNode in exclusionNode.ChildNodes)
 					{
 						ExclusionPositions positions = new ExclusionPositions();
-						positions.StartPosition = int.Parse(positionNode.Attributes["startPosition"].Value);
-						positions.EndPosition = int.Parse(positionNode.Attributes["endPosition"].Value);
+						positions.StartPosition = int.Parse(positionNode.Attributes["startPosition"].Value, CultureInfo.InvariantCulture);
+						positions.EndPosition = int.Parse(positionNode.Attributes["endPosition"].Value, CultureInfo.InvariantCulture);
 						exclusion.ExclusionPositions.Add(positions);
 					}
 					exclusions.Add(exclusion);

@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 
 namespace BizUnitCompare.FlatfileCompare
 {
-	internal class FlatfileCleaner
+	internal static class FlatfileCleaner
 	{
 		internal static MemoryStream RemoveExclusions(string documentPath, List<Exclusion> exclusions)
 		{

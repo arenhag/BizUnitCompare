@@ -4,7 +4,7 @@ using System.IO;
 
 namespace BizUnitCompare.XmlCompare
 {
-	internal class XmlDocumentCleaner
+	internal static class XmlDocumentCleaner
 	{
 		internal static string ReplaceInDocument(string documentPath, IEnumerable<Replacement> replacements)
 		{

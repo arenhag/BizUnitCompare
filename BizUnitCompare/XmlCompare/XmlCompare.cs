@@ -4,6 +4,7 @@ using System.IO;
 using System.Xml;
 using BizUnit;
 using Microsoft.XmlDiffPatch;
+using System.Globalization;
 
 namespace BizUnitCompare.XmlCompare
 {
@@ -21,16 +22,16 @@ namespace BizUnitCompare.XmlCompare
 			{
 				if (!Compare(configuration.GoalFilePath, foundFilePath, configuration.StringsToSearchAndReplace, configuration.ElementsToExclude, configuration.AttributesToExclude, configuration.IgnoreChildOrder, configuration.IgnoreComments))
 				{
-					throw new ApplicationException(string.Format("Xml comparison failed between {0} and {1}.", foundFilePath, configuration.GoalFilePath));
+					throw new ApplicationException(string.Format(CultureInfo.CurrentCulture, "Xml comparison failed between {0} and {1}.", foundFilePath, configuration.GoalFilePath));
 				}
 				context.LogInfo("Files are identical.");
 			}
 			finally
 			{
-				if (foundFilePath != string.Empty && configuration.DeleteFile)
+				if (string.IsNullOrEmpty(foundFilePath) && configuration.DeleteFile)
 				{
 					File.Delete(foundFilePath);
-					context.LogInfo("Found file ({0}) deleted.", foundFilePath);
+					context.LogInfo(string.Format(CultureInfo.CurrentCulture, "Found file ({0}) deleted.", foundFilePath));
 				}
 			}
 		}
