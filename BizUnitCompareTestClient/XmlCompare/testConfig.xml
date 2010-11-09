@@ -1,0 +1,31 @@
+﻿<TestStep assemblyPath="" typeName="BizUnitCompare.XmlCompare">
+	<GoalFile>XmlCompare\goal.xml</GoalFile>
+	<Filter>development.xml</Filter>
+	<SearchDirectory takeFromCtx="searchDirectory"></SearchDirectory>
+	<Timeout>30000</Timeout>
+	<DeleteFile>false</DeleteFile>
+	<IgnoreChildOrder>true</IgnoreChildOrder>
+	<IgnoreComments>true</IgnoreComments>
+	<Replacements>
+		<Replace>
+			<OldString><![CDATA[&gt;]]></OldString>
+			<NewString><![CDATA[>]]></NewString>
+		</Replace>
+		<Replace>
+			<OldString><![CDATA[&lt;]]></OldString>
+			<NewString><![CDATA[<]]></NewString>
+		</Replace>
+	</Replacements>
+	<Exclusions>
+		<Element>/*[local-name()='rootNode']/*[local-name()='test']</Element>
+		<Element>/*[local-name()='rootNode']/*[local-name()='blob']/*[local-name()='service']/*[local-name()='exclude']</Element>
+		<Attribute>
+			<ParentElement>/*[local-name()='rootNode']/*[local-name()='processTime']</ParentElement>
+			<Name>timeStamp</Name>
+		</Attribute>
+		<Attribute>
+			<ParentElement>/*[local-name()='rootNode']/*[local-name()='addresses']/*[local-name()='address']</ParentElement>
+			<Name>type</Name>
+		</Attribute>
+	</Exclusions>
+</TestStep>

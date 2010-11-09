@@ -1,0 +1,8 @@
+LINE_UNIQUE_ID01;HEADER;123;456;test;test2;ABC
+LINE_UNIQUE_ID02;LINE;description1;action1;2010-11-08 10:00:00;username
+LINE_UNIQUE_ID03;LINE;description2;action2;2010-11-08 10:00:00;username
+LINE_UNIQUE_ID04;LINE;description3;action3;2010-11-08 10:00:00;username
+LINE_UNIQUE_ID05;LINE;description4;action4;2010-11-08 10:00:00;username
+LINE_UNIQUE_ID06;LINE;description5;action5;2010-11-08 10:00:00;username
+LINE_UNIQUE_ID07;LINE;description6;action6;2010-11-08 10:00:00;username
+LINE_UNIQUE_ID08;FOOTER;padding

@@ -1,0 +1,20 @@
+<rootNode>
+	<processTime timeStamp="2010-10-21 10:00:01" /> <!-- this attribute is to be removed before comparison -->
+	<test>56</test> <!-- this is to be removed before comparison -->
+	<test>78</test> <!-- this is to be removed before comparison -->
+	<addresses>
+		<address>
+			<streetName>a road</streetName>
+		</address>
+		<address>
+			<streetName>another road</streetName>
+		</address>
+	</addresses>
+	<languages>
+		<language id="2" name="swe"/>
+		<language name="eng" id="1" />
+	</languages>
+	<blob>
+		&lt;service&gt;&lt;include&gt;good&lt;/include&gt;&lt;exclude&gt;worse&lt;/exclude&gt;&lt;/service&gt;
+	</blob>
+</rootNode>

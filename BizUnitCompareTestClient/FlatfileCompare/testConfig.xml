@@ -1,0 +1,27 @@
+﻿<TestStep assemblyPath="" typeName="BizUnitCompare.XmlCompare">
+	<GoalFile>FlatfileCompare\goal.txt</GoalFile>
+	<Filter>development.txt</Filter>
+	<SearchDirectory takeFromCtx="searchDirectory"></SearchDirectory>
+	<Timeout>30000</Timeout>
+	<DeleteFile>false</DeleteFile>
+	<!--
+		I'm guessing that some day one would have to add functionality to exclude specific fields.
+		This due to the fact that an element one would want to exclude could appear on different positions based on the length of the preceeding fields.
+		I.e. one would have to be able to configure delimeters and then specify which field number to exclude.
+	-->
+	<exclusions>
+		<rowType identifier=";HEADER;">
+			<exclusion startPosition="1" endPosition="16" />
+		</rowType>
+		
+		<rowType identifier=";LINE;">
+			<exclusion startPosition="1" endPosition="16" />
+			<exclusion startPosition="44" endPosition="62" />
+		</rowType>
+
+		<rowType identifier=";FOOTER">
+			<exclusion startPosition="1" endPosition="16" />
+		</rowType>
+		
+	</exclusions>
+</TestStep>
