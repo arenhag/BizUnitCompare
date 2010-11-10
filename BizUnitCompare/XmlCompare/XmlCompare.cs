@@ -34,8 +34,11 @@ namespace BizUnitCompare.XmlCompare
 			{
 				if (string.IsNullOrEmpty(foundFilePath) && configuration.DeleteFile)
 				{
-					File.Delete(foundFilePath);
-					context.LogInfo(string.Format(CultureInfo.CurrentCulture, "Found file ({0}) deleted.", foundFilePath));
+					if (foundFilePath != null)
+					{
+						File.Delete(foundFilePath);
+						context.LogInfo(string.Format(CultureInfo.CurrentCulture, "Found file ({0}) deleted.", foundFilePath));
+					}
 				}
 			}
 		}
@@ -89,11 +92,11 @@ namespace BizUnitCompare.XmlCompare
 			}
 			finally
 			{
-				goalXmlReader.Close();
-				foundFileXmlReader.Close();
+				if (goalXmlReader != null) goalXmlReader.Close();
+				if (foundFileXmlReader != null) foundFileXmlReader.Close();
 
-				goalFileReader.Dispose();
-				foundFileReader.Dispose();
+				if (goalFileReader != null) goalFileReader.Dispose();
+				if (foundFileReader != null) foundFileReader.Dispose();
 			}
 
 			return retVal;
