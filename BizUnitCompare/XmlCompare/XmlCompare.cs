@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Xml;
 using BizUnit;
 using Microsoft.XmlDiffPatch;
@@ -20,8 +21,11 @@ namespace BizUnitCompare.XmlCompare
 
 			try
 			{
-				if (!Compare(configuration.GoalFilePath, foundFilePath, configuration.StringsToSearchAndReplace, configuration.ElementsToExclude, configuration.AttributesToExclude, configuration.IgnoreChildOrder, configuration.IgnoreComments))
+				StringBuilder diff;
+				bool comparisonResult = Compare(out diff, configuration.GoalFilePath, foundFilePath, configuration.StringsToSearchAndReplace, configuration.ElementsToExclude, configuration.AttributesToExclude, configuration.IgnoreChildOrder, configuration.IgnoreComments);
+				if (!comparisonResult)
 				{
+					context.LogInfo(string.Format(CultureInfo.CurrentCulture, "This is the diff result: {0}", diff));
 					throw new ApplicationException(string.Format(CultureInfo.CurrentCulture, "Xml comparison failed between {0} and {1}.", foundFilePath, configuration.GoalFilePath));
 				}
 				context.LogInfo("Files are identical.");
@@ -38,9 +42,10 @@ namespace BizUnitCompare.XmlCompare
 
 		#endregion
 
-		private static bool Compare(string goalFilePath, string foundFilePath, IEnumerable<Replacement> replacements, IEnumerable<string> elementsToExclude, IEnumerable<Attribute> attributesToExclude, bool ignoreChildOrder, bool ignoreComments)
+		private static bool Compare(out StringBuilder diff, string goalFilePath, string foundFilePath, IEnumerable<Replacement> replacements, IEnumerable<string> elementsToExclude, IEnumerable<Attribute> attributesToExclude, bool ignoreChildOrder, bool ignoreComments)
 		{
 			bool retVal;
+			diff = new StringBuilder();
 
 			XmlDocument foundFileDocument = new XmlDocument();
 			XmlDocument goalFileDocument = new XmlDocument();
@@ -78,8 +83,9 @@ namespace BizUnitCompare.XmlCompare
 				comparer.IgnoreChildOrder = ignoreChildOrder;
 				comparer.IgnoreComments = ignoreComments;
 
-				//XmlWriter diff = XmlWriter.Create(@"C:\Documents and Settings\Administrator\Desktop\testfiles\xmldiff\diff.xml");
-				retVal = comparer.Compare(goalXmlReader, foundFileXmlReader);
+				XmlWriter diffWriter = XmlWriter.Create(diff);
+				retVal = comparer.Compare(goalXmlReader, foundFileXmlReader, diffWriter);
+				if (diffWriter != null) diffWriter.Flush();
 			}
 			finally
 			{
