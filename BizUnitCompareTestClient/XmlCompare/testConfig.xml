@@ -1,4 +1,4 @@
-﻿<TestStep assemblyPath="" typeName="BizUnitCompare.XmlCompare">
+﻿<TestStep assemblyPath="" typeName="BizUnitCompare.XmlCompare.XmlCompare">
 	<GoalFile>XmlCompare\goal.xml</GoalFile>
 	<Filter>development.xml</Filter>
 	<SearchDirectory takeFromCtx="searchDirectory"></SearchDirectory>
