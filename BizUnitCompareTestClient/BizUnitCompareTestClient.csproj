@@ -89,6 +89,7 @@
     </Content>
     <Content Include="FlatfileCompare\testConfig.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="XmlCompare\development.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -98,6 +99,7 @@
     </Content>
     <Content Include="XmlCompare\testConfig.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
   <ItemGroup>
