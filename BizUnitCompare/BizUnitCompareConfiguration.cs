@@ -8,6 +8,20 @@ namespace BizUnitCompare
 		private string _filter;
 		private string _searchDirectory;
 		private uint _timeout;
+		private string _goalFilePath;
+		private bool _deleteFile;
+
+		internal bool DeleteFile
+		{
+			get { return _deleteFile; }
+			set { _deleteFile = value; }
+		}
+
+		internal string GoalFilePath
+		{
+			get { return _goalFilePath; }
+			set { _goalFilePath = value; }
+		}
 
 		internal string Filter
 		{

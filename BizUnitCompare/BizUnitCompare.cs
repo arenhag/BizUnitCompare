@@ -10,12 +10,14 @@ namespace BizUnitCompare
 	{
 		internal static string GetFoundFilePath(Context context, BizUnitCompareConfiguration configuration)
 		{
+			VerifyParameters(context, configuration);
+
 			context.LogInfo(string.Format(CultureInfo.CurrentCulture, "Waiting for file (in: {0}) for {1} seconds.", configuration.SearchDirectory, configuration.Timeout / 1000));
 			DateTime endTime = DateTime.Now.AddMilliseconds(configuration.Timeout);
 
 			bool fileFound = false;
 			string foundFilePath = string.Empty;
-
+			
 			do
 			{
 				string[] files = Directory.GetFiles(configuration.SearchDirectory, configuration.Filter, SearchOption.TopDirectoryOnly);
@@ -54,6 +56,19 @@ namespace BizUnitCompare
 				throw new ApplicationException(string.Format(CultureInfo.CurrentCulture, "No files found in {0} within the given timeout ({1})", configuration.SearchDirectory, configuration.Timeout));
 			}
 			return foundFilePath;
+		}
+
+		private static void VerifyParameters(Context context, BizUnitCompareConfiguration configuration)
+		{
+			if (configuration == null)
+			{
+				throw new ArgumentNullException("configuration", "Parameter configuration can not be null");
+			}
+
+			if (context == null)
+			{
+				throw new ArgumentNullException("context", "Parameter context can not be null");
+			}
 		}
 	}
 }

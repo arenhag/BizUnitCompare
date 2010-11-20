@@ -9,9 +9,7 @@ namespace BizUnitCompare.XmlCompare
 		# region Backing property fields
 
 		private List<Attribute> _attributesToExclude;
-		private bool _deleteFile;
 		private List<string> _elementsToExclude;
-		private string _goalFilePath;
 		private bool _ignoreChildOrder;
 		private bool _ignoreComments;
 		private List<Replacement> _stringsToSearchAndReplace;
@@ -19,18 +17,6 @@ namespace BizUnitCompare.XmlCompare
 		# endregion
 
 		# region Property accessors
-
-		internal string GoalFilePath
-		{
-			get { return _goalFilePath; }
-			set { _goalFilePath = value; }
-		}
-
-		internal bool DeleteFile
-		{
-			get { return _deleteFile; }
-			set { _deleteFile = value; }
-		}
 
 		internal bool IgnoreChildOrder
 		{

@@ -9,25 +9,11 @@ namespace BizUnitCompare.FlatfileCompare
 	{
 		# region Backing property fields
 
-		private bool _deleteFile;
 		private List<Exclusion> _exclusions;
-		private string _goalFilePath;
 
 		# endregion
 
 		# region Property Accessors
-
-		internal bool DeleteFile
-		{
-			get { return _deleteFile; }
-			set { _deleteFile = value; }
-		}
-
-		internal string GoalFilePath
-		{
-			get { return _goalFilePath; }
-			set { _goalFilePath = value; }
-		}
 
 		internal List<Exclusion> Exclusions
 		{
