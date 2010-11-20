@@ -26,7 +26,7 @@ namespace BizUnitCompare.XmlCompare
 				if (!comparisonResult)
 				{
 					context.LogInfo(string.Format(CultureInfo.CurrentCulture, "This is the diff result: {0}", diff));
-					throw new ApplicationException(string.Format(CultureInfo.CurrentCulture, "Xml comparison failed between {0} and {1}.", foundFilePath, configuration.GoalFilePath));
+					throw new ApplicationException(string.Format(CultureInfo.CurrentCulture, "Xml comparison failed between {0} and {1}. This is the diff result: {0}", foundFilePath, configuration.GoalFilePath, diff));
 				}
 				context.LogInfo("Files are identical.");
 			}
