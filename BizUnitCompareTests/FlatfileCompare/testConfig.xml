@@ -1,0 +1,14 @@
+﻿<TestStep assemblyPath="" typeName="BizUnitCompare.FlatfileCompare.FlatfileCompare">
+	<GoalFile takeFromCtx="goalFile"></GoalFile>
+	<Filter takeFromCtx="filter"></Filter>
+	<SearchDirectory takeFromCtx="searchDirectory"></SearchDirectory>
+	<Timeout>1000</Timeout>
+	<DeleteFile takeFromCtx="deleteFile"></DeleteFile>
+	<exclusions>
+		<rowType identifier="this">
+			<exclusion startPosition="5" endPosition="5" />
+			<exclusion startPosition="8" endPosition="8" />
+			<exclusion startPosition="12" endPosition="12" />
+		</rowType>
+	</exclusions>
+</TestStep>
