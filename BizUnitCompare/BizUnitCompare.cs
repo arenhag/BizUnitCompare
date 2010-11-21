@@ -53,7 +53,7 @@ namespace BizUnitCompare
 
 			if (!fileFound)
 			{
-				throw new ApplicationException(string.Format(CultureInfo.CurrentCulture, "No files found in {0} within the given timeout ({1})", configuration.SearchDirectory, configuration.Timeout));
+				throw new FileNotFoundException(string.Format(CultureInfo.CurrentCulture, "No files found in {0} within the given timeout ({1})", configuration.SearchDirectory, configuration.Timeout));
 			}
 			return foundFilePath;
 		}
