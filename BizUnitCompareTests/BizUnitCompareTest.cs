@@ -19,7 +19,7 @@ namespace BizUnitCompareTests
 			configuration.SearchDirectory = Directory.GetCurrentDirectory();
 			configuration.Filter = "*.should.not.be.found";
 			configuration.Timeout = 200;
-			Assert.Throws<ApplicationException>(delegate { BizUnitCompare.BizUnitCompare.GetFoundFilePath(context, configuration); });
+			Assert.Throws<FileNotFoundException>(delegate { BizUnitCompare.BizUnitCompare.GetFoundFilePath(context, configuration); });
 
 		}
 
@@ -108,7 +108,7 @@ namespace BizUnitCompareTests
 			string fileToCreatePath = Directory.GetCurrentDirectory() + @"\test.test"; ;
 
 			FileStream fileStream = PrepareFileSystem(configuration, fileToCreatePath);
-			Assert.Throws<ApplicationException>(delegate { BizUnitCompare.BizUnitCompare.GetFoundFilePath(context, configuration); });
+			Assert.Throws<FileNotFoundException>(delegate { BizUnitCompare.BizUnitCompare.GetFoundFilePath(context, configuration); });
 			fileStream.Dispose();
 		}
 
