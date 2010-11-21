@@ -45,7 +45,7 @@ namespace BizUnitCompare.FlatfileCompare
 					}
 					finally
 					{
-						if (string.IsNullOrEmpty(foundFilePath) && configuration.DeleteFile)
+						if (!string.IsNullOrEmpty(foundFilePath) && configuration.DeleteFile)
 						{
 							File.Delete(foundFilePath);
 							context.LogInfo(string.Format(CultureInfo.CurrentCulture, "Found file ({0}) deleted.", foundFilePath));

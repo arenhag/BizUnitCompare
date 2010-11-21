@@ -32,7 +32,7 @@ namespace BizUnitCompare.XmlCompare
 			}
 			finally
 			{
-				if (string.IsNullOrEmpty(foundFilePath) && configuration.DeleteFile)
+				if (!string.IsNullOrEmpty(foundFilePath) && configuration.DeleteFile)
 				{
 					if (foundFilePath != null)
 					{
