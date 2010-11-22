@@ -120,7 +120,7 @@ namespace BizUnitCompareTests
 
 		private static void CleanFileSystem(BizUnitCompare.FlatfileCompare.BizUnitFlatfileCompareConfiguration configuration)
 		{
-			foreach (var filePath in Directory.GetFiles(configuration.SearchDirectory, configuration.Filter))
+			foreach (string filePath in Directory.GetFiles(configuration.SearchDirectory, configuration.Filter))
 			{
 				File.Delete(filePath);
 			}

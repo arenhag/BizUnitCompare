@@ -1,21 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using NUnit.Framework;
-using BizUnit;
-using System.Xml;
 using System.IO;
-using System.Diagnostics;
+using System.Text;
+using System.Xml;
+using BizUnit;
+using NUnit.Framework;
 
 namespace BizUnitCompareTests.FlatfileCompare
 {
 	[TestFixture]
-	class FlatfileCompareTest
+	internal class FlatfileCompareTest
 	{
-		string testFilesPath = Directory.GetCurrentDirectory() + @"\FlatfileCompare\testFiles\";
-		XmlDocument config = new XmlDocument();
-		XmlNode configPart;
-		Context context;
+		#region Setup/Teardown
 
 		[SetUp]
 		[TearDown]
@@ -32,37 +27,26 @@ namespace BizUnitCompareTests.FlatfileCompare
 			context.Add("filter", "test.test");
 		}
 
-		[Test]
-		public void ExecuteFoundFileNotDeleted()
+		#endregion
+
+		private readonly string testFilesPath = Directory.GetCurrentDirectory() + @"\FlatfileCompare\testFiles\";
+		private readonly XmlDocument config = new XmlDocument();
+		private XmlNode configPart;
+		private Context context;
+
+		private static FileStream PrepareFileSystem(string fileToCreatePath)
 		{
-			context.Add("deleteFile", "false", true);
-			ExecuteNoException();
-			Assert.IsTrue(File.Exists(context.GetValue("searchDirectory") + context.GetValue("filter")));
+			Directory.CreateDirectory(new FileInfo(fileToCreatePath).DirectoryName);
+			return File.Create(fileToCreatePath);
 		}
 
-		[Test]
-		public void ExecuteFoundFileDeleted()
+		private void CleanFileSystem()
 		{
-			context.Add("deleteFile", "true", true);
-			ExecuteNoException();
-			Assert.IsFalse(File.Exists(context.GetValue("searchDirectory") + context.GetValue("filter")));
-		}
-
-		[Test]
-		public void ExecuteFileNotFoundException()
-		{
-			BizUnitCompare.FlatfileCompare.FlatfileCompare testInstance = new BizUnitCompare.FlatfileCompare.FlatfileCompare();
-
-			StreamWriter goalWriter = new StreamWriter(PrepareFileSystem(testFilesPath + "test.goal"));
-
-			StringBuilder expectedData = new StringBuilder();
-			expectedData.AppendLine("this is the input");
-			expectedData.AppendLine("should not be touched");
-
-			goalWriter.Write(expectedData.ToString());
-			goalWriter.Dispose();
-
-			Assert.Throws<FileNotFoundException>(delegate { testInstance.Execute(configPart, context); });
+			Directory.CreateDirectory(testFilesPath);
+			foreach (string file in Directory.GetFiles(testFilesPath))
+			{
+				File.Delete(file);
+			}
 		}
 
 		[Test]
@@ -116,6 +100,39 @@ namespace BizUnitCompareTests.FlatfileCompare
 		}
 
 		[Test]
+		public void ExecuteFileNotFoundException()
+		{
+			BizUnitCompare.FlatfileCompare.FlatfileCompare testInstance = new BizUnitCompare.FlatfileCompare.FlatfileCompare();
+
+			StreamWriter goalWriter = new StreamWriter(PrepareFileSystem(testFilesPath + "test.goal"));
+
+			StringBuilder expectedData = new StringBuilder();
+			expectedData.AppendLine("this is the input");
+			expectedData.AppendLine("should not be touched");
+
+			goalWriter.Write(expectedData.ToString());
+			goalWriter.Dispose();
+
+			Assert.Throws<FileNotFoundException>(delegate { testInstance.Execute(configPart, context); });
+		}
+
+		[Test]
+		public void ExecuteFoundFileDeleted()
+		{
+			context.Add("deleteFile", "true", true);
+			ExecuteNoException();
+			Assert.IsFalse(File.Exists(context.GetValue("searchDirectory") + context.GetValue("filter")));
+		}
+
+		[Test]
+		public void ExecuteFoundFileNotDeleted()
+		{
+			context.Add("deleteFile", "false", true);
+			ExecuteNoException();
+			Assert.IsTrue(File.Exists(context.GetValue("searchDirectory") + context.GetValue("filter")));
+		}
+
+		[Test]
 		public void ExecuteNoException()
 		{
 			BizUnitCompare.FlatfileCompare.FlatfileCompare testInstance = new BizUnitCompare.FlatfileCompare.FlatfileCompare();
@@ -138,20 +155,6 @@ namespace BizUnitCompareTests.FlatfileCompare
 			goalWriter.Dispose();
 
 			Assert.DoesNotThrow(delegate { testInstance.Execute(configPart, context); });
-		}
-
-		private static FileStream PrepareFileSystem(string fileToCreatePath)
-		{
-			Directory.CreateDirectory(new FileInfo(fileToCreatePath).DirectoryName);
-			return File.Create(fileToCreatePath);
-		}
-		
-		private void CleanFileSystem()
-		{
-			foreach (var file in Directory.GetFiles(testFilesPath))
-			{
-				File.Delete(file);
-			}
 		}
 	}
 }
