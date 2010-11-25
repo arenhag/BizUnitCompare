@@ -109,7 +109,7 @@ namespace BizUnitCompare.XmlCompare
 
 				XmlWriter diffWriter = XmlWriter.Create(diff);
 				retVal = comparer.Compare(goalXmlReader, foundFileXmlReader, diffWriter);
-				if (diffWriter != null) diffWriter.Flush();
+				diffWriter.Flush();
 			}
 			finally
 			{
