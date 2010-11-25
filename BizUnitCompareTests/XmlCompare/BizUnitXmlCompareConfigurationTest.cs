@@ -1,4 +1,5 @@
 ﻿#region License
+
 /*
 Copyright (c) 2010, Fredrik Arenhag
 All rights reserved.
@@ -20,11 +21,11 @@ OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABIL
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
 OF SUCH DAMAGE.
 */
+
 #endregion
 
-using System;
 using System.Collections.Generic;
-using System.Text;
+using BizUnitCompare.XmlCompare;
 using NUnit.Framework;
 
 namespace BizUnitCompareTests.XmlCompare
@@ -33,66 +34,36 @@ namespace BizUnitCompareTests.XmlCompare
 	public class BizUnitXmlCompareConfigurationTest
 	{
 		[Test]
-		public void FilterProperty()
+		public void AttributesToExcludeProperty()
 		{
-			string testValue = "testValue";
-			BizUnitCompare.XmlCompare.BizUnitXmlCompareConfiguration testInstance = new BizUnitCompare.XmlCompare.BizUnitXmlCompareConfiguration();
-			testInstance.Filter = testValue;
-			Assert.AreEqual(testValue, testInstance.Filter);
+			List<Attribute> testValue = new List<Attribute>();
+			Attribute testAttribute = new Attribute();
+			testAttribute.Name = "name";
+			testAttribute.ParentElementXPath = "xpath";
+			testValue.Add(testAttribute);
+			BizUnitXmlCompareConfiguration testInstance = new BizUnitXmlCompareConfiguration();
+			testInstance.AttributesToExclude = testValue;
+			Assert.AreEqual("name", testInstance.AttributesToExclude[0].Name);
+			Assert.AreEqual("xpath", testInstance.AttributesToExclude[0].ParentElementXPath);
 		}
 
 		[Test]
-		public void SearchDirectoryProperty()
+		public void Constructor()
 		{
-			string testValue = "testValue";
-			BizUnitCompare.XmlCompare.BizUnitXmlCompareConfiguration testInstance = new BizUnitCompare.XmlCompare.BizUnitXmlCompareConfiguration();
-			testInstance.SearchDirectory = testValue;
-			Assert.AreEqual(testValue, testInstance.SearchDirectory);
-		}
+			BizUnitXmlCompareConfiguration testInstance = new BizUnitXmlCompareConfiguration();
 
-		[Test]
-		public void TimeoutProperty()
-		{
-			uint testValue = 10000;
-			BizUnitCompare.XmlCompare.BizUnitXmlCompareConfiguration testInstance = new BizUnitCompare.XmlCompare.BizUnitXmlCompareConfiguration();
-			testInstance.Timeout = testValue;
-			Assert.AreEqual(testValue, testInstance.Timeout);
-		}
-
-		[Test]
-		public void GoalFilePathProperty()
-		{
-			string testValue = "testValue";
-			BizUnitCompare.XmlCompare.BizUnitXmlCompareConfiguration testInstance = new BizUnitCompare.XmlCompare.BizUnitXmlCompareConfiguration();
-			testInstance.GoalFilePath = testValue;
-			Assert.AreEqual(testValue, testInstance.GoalFilePath);
+			Assert.NotNull(testInstance.ElementsToExclude);
+			Assert.NotNull(testInstance.AttributesToExclude);
+			Assert.NotNull(testInstance.StringsToSearchAndReplace);
 		}
 
 		[Test]
 		public void DeleteFileProperty()
 		{
-			bool testValue = false;
-			BizUnitCompare.XmlCompare.BizUnitXmlCompareConfiguration testInstance = new BizUnitCompare.XmlCompare.BizUnitXmlCompareConfiguration();
-			testInstance.DeleteFile = testValue;
+			const bool testValue = false;
+			BizUnitXmlCompareConfiguration testInstance = new BizUnitXmlCompareConfiguration();
+			testInstance.DeleteFile = false;
 			Assert.AreEqual(testValue, testInstance.DeleteFile);
-		}
-
-		[Test]
-		public void IgnoreChildOrderProperty()
-		{
-			bool testValue = false;
-			BizUnitCompare.XmlCompare.BizUnitXmlCompareConfiguration testInstance = new BizUnitCompare.XmlCompare.BizUnitXmlCompareConfiguration();
-			testInstance.IgnoreChildOrder = testValue;
-			Assert.AreEqual(testValue, testInstance.IgnoreChildOrder);
-		}
-
-		[Test]
-		public void IgnoreCommentsProperty()
-		{
-			bool testValue = true;
-			BizUnitCompare.XmlCompare.BizUnitXmlCompareConfiguration testInstance = new BizUnitCompare.XmlCompare.BizUnitXmlCompareConfiguration();
-			testInstance.IgnoreComments = testValue;
-			Assert.AreEqual(testValue, testInstance.IgnoreComments);
 		}
 
 		[Test]
@@ -100,47 +71,77 @@ namespace BizUnitCompareTests.XmlCompare
 		{
 			List<string> testValue = new List<string>();
 			testValue.Add("this is an item");
-			BizUnitCompare.XmlCompare.BizUnitXmlCompareConfiguration testInstance = new BizUnitCompare.XmlCompare.BizUnitXmlCompareConfiguration();
+			BizUnitXmlCompareConfiguration testInstance = new BizUnitXmlCompareConfiguration();
 			testInstance.ElementsToExclude = testValue;
 			Assert.AreEqual(testValue, testInstance.ElementsToExclude);
 		}
 
 		[Test]
-		public void AttributesToExcludeProperty()
+		public void FilterProperty()
 		{
-			List<BizUnitCompare.XmlCompare.Attribute> testValue = new List<BizUnitCompare.XmlCompare.Attribute>();
-			BizUnitCompare.XmlCompare.Attribute testAttribute = new BizUnitCompare.XmlCompare.Attribute();
-			testAttribute.Name = "name";
-			testAttribute.ParentElementXPath = "xpath";
-			testValue.Add(testAttribute);
-			BizUnitCompare.XmlCompare.BizUnitXmlCompareConfiguration testInstance = new BizUnitCompare.XmlCompare.BizUnitXmlCompareConfiguration();
-			testInstance.AttributesToExclude = testValue;
-			Assert.AreEqual("name", testInstance.AttributesToExclude[0].Name);
-			Assert.AreEqual("xpath", testInstance.AttributesToExclude[0].ParentElementXPath);
+			string testValue = "testValue";
+			BizUnitXmlCompareConfiguration testInstance = new BizUnitXmlCompareConfiguration();
+			testInstance.Filter = testValue;
+			Assert.AreEqual(testValue, testInstance.Filter);
+		}
+
+		[Test]
+		public void GoalFilePathProperty()
+		{
+			string testValue = "testValue";
+			BizUnitXmlCompareConfiguration testInstance = new BizUnitXmlCompareConfiguration();
+			testInstance.GoalFilePath = testValue;
+			Assert.AreEqual(testValue, testInstance.GoalFilePath);
+		}
+
+		[Test]
+		public void IgnoreChildOrderProperty()
+		{
+			const bool testValue = false;
+			BizUnitXmlCompareConfiguration testInstance = new BizUnitXmlCompareConfiguration();
+			testInstance.IgnoreChildOrder = false;
+			Assert.AreEqual(testValue, testInstance.IgnoreChildOrder);
+		}
+
+		[Test]
+		public void IgnoreCommentsProperty()
+		{
+			const bool testValue = true;
+			BizUnitXmlCompareConfiguration testInstance = new BizUnitXmlCompareConfiguration();
+			testInstance.IgnoreComments = true;
+			Assert.AreEqual(testValue, testInstance.IgnoreComments);
+		}
+
+		[Test]
+		public void SearchDirectoryProperty()
+		{
+			string testValue = "testValue";
+			BizUnitXmlCompareConfiguration testInstance = new BizUnitXmlCompareConfiguration();
+			testInstance.SearchDirectory = testValue;
+			Assert.AreEqual(testValue, testInstance.SearchDirectory);
 		}
 
 		[Test]
 		public void StringsToSearchAndReplaceProperty()
 		{
-			List<BizUnitCompare.XmlCompare.Replacement> testValue = new List<BizUnitCompare.XmlCompare.Replacement>();
-			BizUnitCompare.XmlCompare.Replacement testReplacement = new BizUnitCompare.XmlCompare.Replacement();
+			List<Replacement> testValue = new List<Replacement>();
+			Replacement testReplacement = new Replacement();
 			testReplacement.NewString = "new";
 			testReplacement.OldString = "old";
 			testValue.Add(testReplacement);
-			BizUnitCompare.XmlCompare.BizUnitXmlCompareConfiguration testInstance = new BizUnitCompare.XmlCompare.BizUnitXmlCompareConfiguration();
+			BizUnitXmlCompareConfiguration testInstance = new BizUnitXmlCompareConfiguration();
 			testInstance.StringsToSearchAndReplace = testValue;
 			Assert.AreEqual("new", testInstance.StringsToSearchAndReplace[0].NewString);
 			Assert.AreEqual("old", testInstance.StringsToSearchAndReplace[0].OldString);
 		}
 
 		[Test]
-		public void Constructor()
+		public void TimeoutProperty()
 		{
-			BizUnitCompare.XmlCompare.BizUnitXmlCompareConfiguration testInstance = new BizUnitCompare.XmlCompare.BizUnitXmlCompareConfiguration();
-
-			Assert.NotNull(testInstance.ElementsToExclude);
-			Assert.NotNull(testInstance.AttributesToExclude);
-			Assert.NotNull(testInstance.StringsToSearchAndReplace);
+			uint testValue = 10000;
+			BizUnitXmlCompareConfiguration testInstance = new BizUnitXmlCompareConfiguration();
+			testInstance.Timeout = testValue;
+			Assert.AreEqual(testValue, testInstance.Timeout);
 		}
 	}
 }

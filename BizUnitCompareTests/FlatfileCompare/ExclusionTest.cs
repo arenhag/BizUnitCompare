@@ -1,4 +1,5 @@
 ﻿#region License
+
 /*
 Copyright (c) 2010, Fredrik Arenhag
 All rights reserved.
@@ -20,47 +21,22 @@ OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABIL
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
 OF SUCH DAMAGE.
 */
+
 #endregion
 
-using System;
 using System.Collections.Generic;
-using System.Text;
+using BizUnitCompare.FlatfileCompare;
 using NUnit.Framework;
 
 namespace BizUnitCompareTests.FlatfileCompare
 {
 	[TestFixture]
-	class ExclusionTest
+	internal class ExclusionTest
 	{
-		[Test]
-		public void RowIdentifyingRegularExpression()
-		{
-			BizUnitCompare.FlatfileCompare.Exclusion testInstance = new BizUnitCompare.FlatfileCompare.Exclusion();
-			string testValue = "testExpression";
-			testInstance.RowIdentifyingRegularExpression = testValue;
-
-			Assert.AreEqual(testValue, testInstance.RowIdentifyingRegularExpression);
-		}
-
-		[Test]
-		public void ExclusionPositions()
-		{
-			List<BizUnitCompare.FlatfileCompare.ExclusionPositions> testInstance = new List<BizUnitCompare.FlatfileCompare.ExclusionPositions>();
-			BizUnitCompare.FlatfileCompare.ExclusionPositions testValue = new BizUnitCompare.FlatfileCompare.ExclusionPositions();
-
-			testValue.StartPosition = 10;
-			testValue.EndPosition = 20;
-
-			testInstance.Add(testValue);
-
-			Assert.AreEqual(10, testInstance[0].StartPosition);
-			Assert.AreEqual(20, testInstance[0].EndPosition);
-		}
-
 		[Test]
 		public void Constructor()
 		{
-			BizUnitCompare.FlatfileCompare.Exclusion testInstance = new BizUnitCompare.FlatfileCompare.Exclusion();
+			Exclusion testInstance = new Exclusion();
 
 			Assert.IsNotNull(testInstance.ExclusionPositions);
 		}
@@ -68,14 +44,14 @@ namespace BizUnitCompareTests.FlatfileCompare
 		[Test]
 		public void ExclusionBitMap()
 		{
-			BizUnitCompare.FlatfileCompare.Exclusion testInstance = new BizUnitCompare.FlatfileCompare.Exclusion();
-			
-			BizUnitCompare.FlatfileCompare.ExclusionPositions testValue = new BizUnitCompare.FlatfileCompare.ExclusionPositions();
+			Exclusion testInstance = new Exclusion();
+
+			ExclusionPositions testValue = new ExclusionPositions();
 			testValue.StartPosition = 1;
 			testValue.EndPosition = 3;
 			testInstance.ExclusionPositions.Add(testValue);
 
-			testValue = new BizUnitCompare.FlatfileCompare.ExclusionPositions();
+			testValue = new ExclusionPositions();
 			testValue.StartPosition = 7;
 			testValue.EndPosition = 10;
 			testInstance.ExclusionPositions.Add(testValue);
@@ -90,7 +66,32 @@ namespace BizUnitCompareTests.FlatfileCompare
 			expectedVal[9] = true;
 			bool[] retVal = testInstance.ExclusionBitMap;
 
-			Assert.AreEqual(expectedVal,retVal);
+			Assert.AreEqual(expectedVal, retVal);
+		}
+
+		[Test]
+		public void ExclusionPositions()
+		{
+			List<ExclusionPositions> testInstance = new List<ExclusionPositions>();
+			ExclusionPositions testValue = new ExclusionPositions();
+
+			testValue.StartPosition = 10;
+			testValue.EndPosition = 20;
+
+			testInstance.Add(testValue);
+
+			Assert.AreEqual(10, testInstance[0].StartPosition);
+			Assert.AreEqual(20, testInstance[0].EndPosition);
+		}
+
+		[Test]
+		public void RowIdentifyingRegularExpression()
+		{
+			Exclusion testInstance = new Exclusion();
+			string testValue = "testExpression";
+			testInstance.RowIdentifyingRegularExpression = testValue;
+
+			Assert.AreEqual(testValue, testInstance.RowIdentifyingRegularExpression);
 		}
 	}
 }

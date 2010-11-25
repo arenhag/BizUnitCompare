@@ -1,4 +1,5 @@
 ﻿#region License
+
 /*
 Copyright (c) 2010, Fredrik Arenhag
 All rights reserved.
@@ -20,38 +21,88 @@ OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABIL
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
 OF SUCH DAMAGE.
 */
+
 #endregion
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
-using NUnit.Framework;
 using System.IO;
+using BizUnit;
+using BizUnitCompare.FlatfileCompare;
+using NUnit.Framework;
 
 namespace BizUnitCompareTests
 {
 	[TestFixture]
-	class BizUnitCompareTest
+	internal class BizUnitCompareTest
 	{
-		[Test]
-		public void GetFoundFilePathFileNotFound()
+		private static FileStream PrepareFileSystem(BizUnitFlatfileCompareConfiguration configuration, string fileToCreatePath)
 		{
-			BizUnit.Context context = new BizUnit.Context();
-			BizUnitCompare.FlatfileCompare.BizUnitFlatfileCompareConfiguration configuration = new BizUnitCompare.FlatfileCompare.BizUnitFlatfileCompareConfiguration();
-			
-			configuration.SearchDirectory = Directory.GetCurrentDirectory();
-			configuration.Filter = "*.should.not.be.found";
-			configuration.Timeout = 200;
-			Assert.Throws<FileNotFoundException>(delegate { BizUnitCompare.BizUnitCompare.GetFoundFilePath(context, configuration); });
+			CleanFileSystem(configuration);
+			return File.Create(fileToCreatePath);
+		}
 
+		private static void CleanFileSystem(BizUnitFlatfileCompareConfiguration configuration)
+		{
+			foreach (string filePath in Directory.GetFiles(configuration.SearchDirectory, configuration.Filter))
+			{
+				File.Delete(filePath);
+			}
+		}
+
+		[Test]
+		public void GetFoundFileDirectoryNotFoundException()
+		{
+			Context context = new Context();
+			BizUnitFlatfileCompareConfiguration configuration = new BizUnitFlatfileCompareConfiguration();
+
+			configuration.SearchDirectory = @"c:\thisFolderShouldnotExist";
+			configuration.Filter = "*.should.not.be.found";
+			configuration.Timeout = 1000;
+			Assert.Throws<DirectoryNotFoundException>(delegate { BizUnitCompare.BizUnitCompare.GetFoundFilePath(context, configuration); });
+		}
+
+		[Test]
+		public void GetFoundFileFindFile()
+		{
+			Context context = new Context();
+			BizUnitFlatfileCompareConfiguration configuration = new BizUnitFlatfileCompareConfiguration();
+
+			configuration.SearchDirectory = Directory.GetCurrentDirectory();
+			configuration.Filter = "*.test";
+			configuration.Timeout = 1000;
+
+			string fileToCreatePath = Directory.GetCurrentDirectory() + @"\test.test";
+
+			FileStream fileStream = PrepareFileSystem(configuration, fileToCreatePath);
+			fileStream.Dispose();
+
+			string foundFile = BizUnitCompare.BizUnitCompare.GetFoundFilePath(context, configuration);
+			Assert.AreEqual(fileToCreatePath, foundFile);
+		}
+
+		[Test]
+		public void GetFoundFileLockedFile()
+		{
+			Context context = new Context();
+			BizUnitFlatfileCompareConfiguration configuration = new BizUnitFlatfileCompareConfiguration();
+
+			configuration.SearchDirectory = Directory.GetCurrentDirectory();
+			configuration.Filter = "*.test";
+			configuration.Timeout = 1000;
+
+			string fileToCreatePath = Directory.GetCurrentDirectory() + @"\test.test";
+
+			FileStream fileStream = PrepareFileSystem(configuration, fileToCreatePath);
+			Assert.Throws<FileNotFoundException>(delegate { BizUnitCompare.BizUnitCompare.GetFoundFilePath(context, configuration); });
+			fileStream.Dispose();
 		}
 
 		[Test]
 		public void GetFoundFilePathArgumentException()
 		{
-			BizUnit.Context context = new BizUnit.Context();
-			BizUnitCompare.FlatfileCompare.BizUnitFlatfileCompareConfiguration configuration = new BizUnitCompare.FlatfileCompare.BizUnitFlatfileCompareConfiguration();
+			Context context = new Context();
+			BizUnitFlatfileCompareConfiguration configuration = new BizUnitFlatfileCompareConfiguration();
 
 			configuration.SearchDirectory = @"";
 			configuration.Filter = "*.should.not.be.found";
@@ -63,22 +114,22 @@ namespace BizUnitCompareTests
 		}
 
 		[Test]
-		public void GetFoundFileDirectoryNotFoundException()
+		public void GetFoundFilePathFileNotFound()
 		{
-			BizUnit.Context context = new BizUnit.Context();
-			BizUnitCompare.FlatfileCompare.BizUnitFlatfileCompareConfiguration configuration = new BizUnitCompare.FlatfileCompare.BizUnitFlatfileCompareConfiguration();
+			Context context = new Context();
+			BizUnitFlatfileCompareConfiguration configuration = new BizUnitFlatfileCompareConfiguration();
 
-			configuration.SearchDirectory = @"c:\thisFolderShouldnotExist";
+			configuration.SearchDirectory = Directory.GetCurrentDirectory();
 			configuration.Filter = "*.should.not.be.found";
-			configuration.Timeout = 1000;
-			Assert.Throws<DirectoryNotFoundException>(delegate { BizUnitCompare.BizUnitCompare.GetFoundFilePath(context, configuration); });
+			configuration.Timeout = 200;
+			Assert.Throws<FileNotFoundException>(delegate { BizUnitCompare.BizUnitCompare.GetFoundFilePath(context, configuration); });
 		}
 
 		[Test]
 		public void GetFoundFileTimeout()
 		{
-			BizUnit.Context context = new BizUnit.Context();
-			BizUnitCompare.FlatfileCompare.BizUnitFlatfileCompareConfiguration configuration = new BizUnitCompare.FlatfileCompare.BizUnitFlatfileCompareConfiguration();
+			Context context = new Context();
+			BizUnitFlatfileCompareConfiguration configuration = new BizUnitFlatfileCompareConfiguration();
 
 			configuration.SearchDirectory = @"c:\";
 			configuration.Filter = "*.should.not.be.found";
@@ -91,63 +142,15 @@ namespace BizUnitCompareTests
 				BizUnitCompare.BizUnitCompare.GetFoundFilePath(context, configuration);
 				stopwatch.Stop();
 			}
+// ReSharper disable EmptyGeneralCatchClause
 			catch (Exception)
+// ReSharper restore EmptyGeneralCatchClause
 			{
 			}
 			long millisecondsPassed = stopwatch.ElapsedMilliseconds;
 
 			Assert.GreaterOrEqual(millisecondsPassed, configuration.Timeout);
 			Assert.LessOrEqual(millisecondsPassed, configuration.Timeout + 120); // 120 is added since the thread sleep is set to 100 ms, 20 ms for added execution time
-		}
-
-		[Test]
-		public void GetFoundFileFindFile()
-		{
-			BizUnit.Context context = new BizUnit.Context();
-			BizUnitCompare.FlatfileCompare.BizUnitFlatfileCompareConfiguration configuration = new BizUnitCompare.FlatfileCompare.BizUnitFlatfileCompareConfiguration();
-
-			configuration.SearchDirectory = Directory.GetCurrentDirectory();
-			configuration.Filter = "*.test";
-			configuration.Timeout = 1000;
-
-			string fileToCreatePath = Directory.GetCurrentDirectory() + @"\test.test"; ;
-			
-			FileStream fileStream = PrepareFileSystem(configuration, fileToCreatePath);
-			fileStream.Dispose();
-
-			string foundFile = BizUnitCompare.BizUnitCompare.GetFoundFilePath(context, configuration);
-			Assert.AreEqual(fileToCreatePath, foundFile);
-		}
-
-		[Test]
-		public void GetFoundFileLockedFile()
-		{
-			BizUnit.Context context = new BizUnit.Context();
-			BizUnitCompare.FlatfileCompare.BizUnitFlatfileCompareConfiguration configuration = new BizUnitCompare.FlatfileCompare.BizUnitFlatfileCompareConfiguration();
-
-			configuration.SearchDirectory = Directory.GetCurrentDirectory();
-			configuration.Filter = "*.test";
-			configuration.Timeout = 1000;
-
-			string fileToCreatePath = Directory.GetCurrentDirectory() + @"\test.test"; ;
-
-			FileStream fileStream = PrepareFileSystem(configuration, fileToCreatePath);
-			Assert.Throws<FileNotFoundException>(delegate { BizUnitCompare.BizUnitCompare.GetFoundFilePath(context, configuration); });
-			fileStream.Dispose();
-		}
-
-		private static FileStream PrepareFileSystem(BizUnitCompare.FlatfileCompare.BizUnitFlatfileCompareConfiguration configuration, string fileToCreatePath)
-		{
-			CleanFileSystem(configuration);
-			return File.Create(fileToCreatePath);
-		}
-
-		private static void CleanFileSystem(BizUnitCompare.FlatfileCompare.BizUnitFlatfileCompareConfiguration configuration)
-		{
-			foreach (string filePath in Directory.GetFiles(configuration.SearchDirectory, configuration.Filter))
-			{
-				File.Delete(filePath);
-			}
 		}
 	}
 }

@@ -1,4 +1,5 @@
 #region License
+
 /*
 Copyright (c) 2010, Fredrik Arenhag
 All rights reserved.
@@ -20,12 +21,13 @@ OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABIL
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
 OF SUCH DAMAGE.
 */
+
 #endregion
 
 using System.Collections.Generic;
+using System.Globalization;
 using System.Xml;
 using BizUnit;
-using System.Globalization;
 
 namespace BizUnitCompare.FlatfileCompare
 {
@@ -78,14 +80,20 @@ namespace BizUnitCompare.FlatfileCompare
 				foreach (XmlNode exclusionNode in exclusionNodes)
 				{
 					Exclusion exclusion = new Exclusion();
-					exclusion.RowIdentifyingRegularExpression = exclusionNode.Attributes["identifier"].Value;
-
-					foreach (XmlNode positionNode in exclusionNode.ChildNodes)
+					if (exclusionNode.Attributes != null)
 					{
-						ExclusionPositions positions = new ExclusionPositions();
-						positions.StartPosition = int.Parse(positionNode.Attributes["startPosition"].Value, CultureInfo.InvariantCulture);
-						positions.EndPosition = int.Parse(positionNode.Attributes["endPosition"].Value, CultureInfo.InvariantCulture);
-						exclusion.ExclusionPositions.Add(positions);
+						exclusion.RowIdentifyingRegularExpression = exclusionNode.Attributes["identifier"].Value;
+
+						foreach (XmlNode positionNode in exclusionNode.ChildNodes)
+						{
+							ExclusionPositions positions = new ExclusionPositions();
+							if (positionNode.Attributes != null)
+							{
+								positions.StartPosition = int.Parse(positionNode.Attributes["startPosition"].Value, CultureInfo.InvariantCulture);
+								positions.EndPosition = int.Parse(positionNode.Attributes["endPosition"].Value, CultureInfo.InvariantCulture);
+							}
+							exclusion.ExclusionPositions.Add(positions);
+						}
 					}
 					exclusions.Add(exclusion);
 				}

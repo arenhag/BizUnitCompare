@@ -1,4 +1,5 @@
 #region License
+
 /*
 Copyright (c) 2010, Fredrik Arenhag
 All rights reserved.
@@ -20,6 +21,7 @@ OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABIL
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
 OF SUCH DAMAGE.
 */
+
 #endregion
 
 using System;
@@ -30,13 +32,13 @@ namespace BizUnitCompareTestClient
 {
 	internal class Program
 	{
-		private static void Main(string[] args)
+		private static void Main()
 		{
 			Console.WriteLine("===== LAUNCHING XML COMPARE TEST =====");
 			XmlCompareTest xmlCompareTest = new XmlCompareTest();
 			xmlCompareTest.Test();
 			Console.WriteLine("===== XML COMPARE TEST COMPLETE =====");
-			
+
 			Console.WriteLine();
 
 			Console.WriteLine("===== LAUNCHING FLATFILE COMPARE TEST =====");

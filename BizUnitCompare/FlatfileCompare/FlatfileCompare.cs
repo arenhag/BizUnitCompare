@@ -1,4 +1,5 @@
 #region License
+
 /*
 Copyright (c) 2010, Fredrik Arenhag
 All rights reserved.
@@ -20,13 +21,14 @@ OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABIL
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
 OF SUCH DAMAGE.
 */
+
 #endregion
 
 using System;
+using System.Globalization;
 using System.IO;
 using System.Xml;
 using BizUnit;
-using System.Globalization;
 
 namespace BizUnitCompare.FlatfileCompare
 {

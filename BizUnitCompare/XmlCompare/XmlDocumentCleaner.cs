@@ -1,4 +1,5 @@
 #region License
+
 /*
 Copyright (c) 2010, Fredrik Arenhag
 All rights reserved.
@@ -20,11 +21,12 @@ OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABIL
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
 OF SUCH DAMAGE.
 */
+
 #endregion
 
 using System.Collections.Generic;
-using System.Xml;
 using System.IO;
+using System.Xml;
 
 namespace BizUnitCompare.XmlCompare
 {
@@ -52,7 +54,7 @@ namespace BizUnitCompare.XmlCompare
 			{
 				foreach (XmlNode parentNode in parentNodes)
 				{
-					parentNode.Attributes.RemoveNamedItem(attribute.Name);
+					if (parentNode.Attributes != null) parentNode.Attributes.RemoveNamedItem(attribute.Name);
 				}
 			}
 		}
@@ -64,7 +66,7 @@ namespace BizUnitCompare.XmlCompare
 			{
 				foreach (XmlNode node in nodesToRemove)
 				{
-					node.ParentNode.RemoveChild(node);
+					if (node.ParentNode != null) node.ParentNode.RemoveChild(node);
 				}
 			}
 		}

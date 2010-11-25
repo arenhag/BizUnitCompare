@@ -1,4 +1,5 @@
 #region License
+
 /*
 Copyright (c) 2010, Fredrik Arenhag
 All rights reserved.
@@ -20,6 +21,7 @@ OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABIL
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
 OF SUCH DAMAGE.
 */
+
 #endregion
 
 using System.Collections.Generic;
@@ -48,11 +50,12 @@ namespace BizUnitCompare.FlatfileCompare
 						foreach (Exclusion exclusion in exclusions)
 						{
 							Regex identifyingExpression = new Regex(exclusion.RowIdentifyingRegularExpression);
-							if (identifyingExpression.Match(line).Success)
-							{
-								strippedLine = StripExclusionFromString(line, exclusion);
-								break; // this is to ensure that a line will only match against one regular expression. if the user wants to make more than one exclusion per row type he/she should use multiple "<exclusion>"-nodes for that "<rowType>" in the config.
-							}
+							if (line != null)
+								if (identifyingExpression.Match(line).Success)
+								{
+									strippedLine = StripExclusionFromString(line, exclusion);
+									break; // this is to ensure that a line will only match against one regular expression. if the user wants to make more than one exclusion per row type he/she should use multiple "<exclusion>"-nodes for that "<rowType>" in the config.
+								}
 						}
 
 						cleanedDataWriter.WriteLine(strippedLine);

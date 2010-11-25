@@ -1,4 +1,5 @@
 ﻿#region License
+
 /*
 Copyright (c) 2010, Fredrik Arenhag
 All rights reserved.
@@ -20,6 +21,7 @@ OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABIL
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
 OF SUCH DAMAGE.
 */
+
 #endregion
 
 using System;
@@ -41,22 +43,22 @@ namespace BizUnitCompareTests.FlatfileCompare
 		public void SetUp()
 		{
 			CleanFileSystem();
-			config.Load(@"FlatfileCompare\testConfig.xml");
-			configPart = config.SelectSingleNode("/TestStep");
+			_config.Load(@"FlatfileCompare\testConfig.xml");
+			_configPart = _config.SelectSingleNode("/TestStep");
 
-			context = new Context();
-			context.Add("searchDirectory", testFilesPath);
-			context.Add("deleteFile", "false");
-			context.Add("goalFile", testFilesPath + "test.goal");
-			context.Add("filter", "test.test");
+			_context = new Context();
+			_context.Add("searchDirectory", _testFilesPath);
+			_context.Add("deleteFile", "false");
+			_context.Add("goalFile", _testFilesPath + "test.goal");
+			_context.Add("filter", "test.test");
 		}
 
 		#endregion
 
-		private readonly string testFilesPath = Directory.GetCurrentDirectory() + @"\FlatfileCompare\testFiles\";
-		private readonly XmlDocument config = new XmlDocument();
-		private XmlNode configPart;
-		private Context context;
+		private readonly string _testFilesPath = Directory.GetCurrentDirectory() + @"\FlatfileCompare\testFiles\";
+		private readonly XmlDocument _config = new XmlDocument();
+		private XmlNode _configPart;
+		private Context _context;
 
 		private static FileStream PrepareFileSystem(string fileToCreatePath)
 		{
@@ -66,20 +68,20 @@ namespace BizUnitCompareTests.FlatfileCompare
 
 		private void CleanFileSystem()
 		{
-			Directory.CreateDirectory(testFilesPath);
-			foreach (string file in Directory.GetFiles(testFilesPath))
+			Directory.CreateDirectory(_testFilesPath);
+			foreach (string file in Directory.GetFiles(_testFilesPath))
 			{
 				File.Delete(file);
 			}
 		}
 
 		[Test]
-		public void ExecuteApplicationException_1()
+		public void ExecuteApplicationException1()
 		{
 			BizUnitCompare.FlatfileCompare.FlatfileCompare testInstance = new BizUnitCompare.FlatfileCompare.FlatfileCompare();
 
-			StreamWriter testWriter = new StreamWriter(PrepareFileSystem(testFilesPath + "test.test"));
-			StreamWriter goalWriter = new StreamWriter(PrepareFileSystem(testFilesPath + "test.goal"));
+			StreamWriter testWriter = new StreamWriter(PrepareFileSystem(_testFilesPath + "test.test"));
+			StreamWriter goalWriter = new StreamWriter(PrepareFileSystem(_testFilesPath + "test.goal"));
 
 			StringBuilder outputData = new StringBuilder();
 			outputData.AppendLine("this is the input");
@@ -95,16 +97,16 @@ namespace BizUnitCompareTests.FlatfileCompare
 			testWriter.Dispose();
 			goalWriter.Dispose();
 
-			Assert.Throws<ApplicationException>(delegate { testInstance.Execute(configPart, context); });
+			Assert.Throws<ApplicationException>(delegate { testInstance.Execute(_configPart, _context); });
 		}
 
 		[Test]
-		public void ExecuteApplicationException_2()
+		public void ExecuteApplicationException2()
 		{
 			BizUnitCompare.FlatfileCompare.FlatfileCompare testInstance = new BizUnitCompare.FlatfileCompare.FlatfileCompare();
 
-			StreamWriter testWriter = new StreamWriter(PrepareFileSystem(testFilesPath + "test.test"));
-			StreamWriter goalWriter = new StreamWriter(PrepareFileSystem(testFilesPath + "test.goal"));
+			StreamWriter testWriter = new StreamWriter(PrepareFileSystem(_testFilesPath + "test.test"));
+			StreamWriter goalWriter = new StreamWriter(PrepareFileSystem(_testFilesPath + "test.goal"));
 
 			StringBuilder outputData = new StringBuilder();
 			outputData.AppendLine("this is the input");
@@ -120,7 +122,7 @@ namespace BizUnitCompareTests.FlatfileCompare
 			testWriter.Dispose();
 			goalWriter.Dispose();
 
-			Assert.Throws<ApplicationException>(delegate { testInstance.Execute(configPart, context); });
+			Assert.Throws<ApplicationException>(delegate { testInstance.Execute(_configPart, _context); });
 		}
 
 		[Test]
@@ -128,7 +130,7 @@ namespace BizUnitCompareTests.FlatfileCompare
 		{
 			BizUnitCompare.FlatfileCompare.FlatfileCompare testInstance = new BizUnitCompare.FlatfileCompare.FlatfileCompare();
 
-			StreamWriter goalWriter = new StreamWriter(PrepareFileSystem(testFilesPath + "test.goal"));
+			StreamWriter goalWriter = new StreamWriter(PrepareFileSystem(_testFilesPath + "test.goal"));
 
 			StringBuilder expectedData = new StringBuilder();
 			expectedData.AppendLine("this is the input");
@@ -137,23 +139,23 @@ namespace BizUnitCompareTests.FlatfileCompare
 			goalWriter.Write(expectedData.ToString());
 			goalWriter.Dispose();
 
-			Assert.Throws<FileNotFoundException>(delegate { testInstance.Execute(configPart, context); });
+			Assert.Throws<FileNotFoundException>(delegate { testInstance.Execute(_configPart, _context); });
 		}
 
 		[Test]
 		public void ExecuteFoundFileDeleted()
 		{
-			context.Add("deleteFile", "true", true);
+			_context.Add("deleteFile", "true", true);
 			ExecuteNoException();
-			Assert.IsFalse(File.Exists(context.GetValue("searchDirectory") + context.GetValue("filter")));
+			Assert.IsFalse(File.Exists(_context.GetValue("searchDirectory") + _context.GetValue("filter")));
 		}
 
 		[Test]
 		public void ExecuteFoundFileNotDeleted()
 		{
-			context.Add("deleteFile", "false", true);
+			_context.Add("deleteFile", "false", true);
 			ExecuteNoException();
-			Assert.IsTrue(File.Exists(context.GetValue("searchDirectory") + context.GetValue("filter")));
+			Assert.IsTrue(File.Exists(_context.GetValue("searchDirectory") + _context.GetValue("filter")));
 		}
 
 		[Test]
@@ -161,8 +163,8 @@ namespace BizUnitCompareTests.FlatfileCompare
 		{
 			BizUnitCompare.FlatfileCompare.FlatfileCompare testInstance = new BizUnitCompare.FlatfileCompare.FlatfileCompare();
 
-			StreamWriter testWriter = new StreamWriter(PrepareFileSystem(testFilesPath + "test.test"));
-			StreamWriter goalWriter = new StreamWriter(PrepareFileSystem(testFilesPath + "test.goal"));
+			StreamWriter testWriter = new StreamWriter(PrepareFileSystem(_testFilesPath + "test.test"));
+			StreamWriter goalWriter = new StreamWriter(PrepareFileSystem(_testFilesPath + "test.goal"));
 
 			StringBuilder outputData = new StringBuilder();
 			outputData.AppendLine("this is the input");
@@ -178,7 +180,7 @@ namespace BizUnitCompareTests.FlatfileCompare
 			testWriter.Dispose();
 			goalWriter.Dispose();
 
-			Assert.DoesNotThrow(delegate { testInstance.Execute(configPart, context); });
+			Assert.DoesNotThrow(delegate { testInstance.Execute(_configPart, _context); });
 		}
 	}
 }

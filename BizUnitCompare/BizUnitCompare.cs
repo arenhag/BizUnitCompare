@@ -1,4 +1,5 @@
 #region License
+
 /*
 Copyright (c) 2010, Fredrik Arenhag
 All rights reserved.
@@ -20,13 +21,14 @@ OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABIL
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
 OF SUCH DAMAGE.
 */
+
 #endregion
 
 using System;
+using System.Globalization;
 using System.IO;
 using System.Threading;
 using BizUnit;
-using System.Globalization;
 
 namespace BizUnitCompare
 {
@@ -36,12 +38,12 @@ namespace BizUnitCompare
 		{
 			VerifyParameters(context, configuration);
 
-			context.LogInfo(string.Format(CultureInfo.CurrentCulture, "Waiting for file (in: {0}) for {1} seconds.", configuration.SearchDirectory, configuration.Timeout / 1000));
+			context.LogInfo(string.Format(CultureInfo.CurrentCulture, "Waiting for file (in: {0}) for {1} seconds.", configuration.SearchDirectory, configuration.Timeout/1000));
 			DateTime endTime = DateTime.Now.AddMilliseconds(configuration.Timeout);
 
 			bool fileFound = false;
 			string foundFilePath = string.Empty;
-			
+
 			do
 			{
 				string[] files = Directory.GetFiles(configuration.SearchDirectory, configuration.Filter, SearchOption.TopDirectoryOnly);

@@ -1,4 +1,5 @@
 #region License
+
 /*
 Copyright (c) 2010, Fredrik Arenhag
 All rights reserved.
@@ -20,6 +21,7 @@ OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABIL
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
 OF SUCH DAMAGE.
 */
+
 #endregion
 
 using System.Collections.Generic;
@@ -28,13 +30,13 @@ namespace BizUnitCompare.FlatfileCompare
 {
 	internal class Exclusion
 	{
+		private List<ExclusionPositions> _exclusionPositions;
+		private string _rowIdentifyingRegularExpression;
+
 		internal Exclusion()
 		{
 			ExclusionPositions = new List<ExclusionPositions>();
 		}
-
-		private string _rowIdentifyingRegularExpression;
-		private List<ExclusionPositions> _exclusionPositions;
 
 		internal string RowIdentifyingRegularExpression
 		{

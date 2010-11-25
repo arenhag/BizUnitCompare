@@ -1,4 +1,5 @@
 ﻿#region License
+
 /*
 Copyright (c) 2010, Fredrik Arenhag
 All rights reserved.
@@ -20,11 +21,10 @@ OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABIL
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
 OF SUCH DAMAGE.
 */
+
 #endregion
 
-using System;
-using System.Collections.Generic;
-using System.Text;
+using BizUnitCompare.FlatfileCompare;
 using NUnit.Framework;
 
 namespace BizUnitCompareTests.FlatfileCompare
@@ -35,7 +35,7 @@ namespace BizUnitCompareTests.FlatfileCompare
 		[Test]
 		public void EndPosition()
 		{
-			BizUnitCompare.FlatfileCompare.ExclusionPositions testInstance = new BizUnitCompare.FlatfileCompare.ExclusionPositions();
+			ExclusionPositions testInstance = new ExclusionPositions();
 			testInstance.EndPosition = 10;
 
 			Assert.AreEqual(10, testInstance.EndPosition);
@@ -44,7 +44,7 @@ namespace BizUnitCompareTests.FlatfileCompare
 		[Test]
 		public void StartPosition()
 		{
-			BizUnitCompare.FlatfileCompare.ExclusionPositions testInstance = new BizUnitCompare.FlatfileCompare.ExclusionPositions();
+			ExclusionPositions testInstance = new ExclusionPositions();
 			testInstance.StartPosition = 6;
 
 			Assert.AreEqual(6, testInstance.StartPosition);

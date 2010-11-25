@@ -1,4 +1,5 @@
 ﻿#region License
+
 /*
 Copyright (c) 2010, Fredrik Arenhag
 All rights reserved.
@@ -20,11 +21,11 @@ OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABIL
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
 OF SUCH DAMAGE.
 */
+
 #endregion
 
-using System;
 using System.Collections.Generic;
-using System.Text;
+using BizUnitCompare.FlatfileCompare;
 using NUnit.Framework;
 
 namespace BizUnitCompareTests.FlatfileCompare
@@ -33,19 +34,61 @@ namespace BizUnitCompareTests.FlatfileCompare
 	public class BizUnitFlatfileCompareConfigurationTest
 	{
 		[Test]
+		public void Constructor()
+		{
+			BizUnitFlatfileCompareConfiguration testInstance = new BizUnitFlatfileCompareConfiguration();
+
+			Assert.IsNotNull(testInstance.Exclusions);
+		}
+
+		[Test]
+		public void DeleteFileProperty()
+		{
+			const bool testValue = false;
+			BizUnitFlatfileCompareConfiguration testInstance = new BizUnitFlatfileCompareConfiguration();
+			testInstance.DeleteFile = false;
+			Assert.AreEqual(testValue, testInstance.DeleteFile);
+		}
+
+		[Test]
+		public void ExclusionProperty()
+		{
+			List<Exclusion> testList = new List<Exclusion>();
+			Exclusion testValue = new Exclusion();
+			ExclusionPositions testExclusionPositions = new ExclusionPositions();
+			testExclusionPositions.StartPosition = 10;
+			testExclusionPositions.EndPosition = 20;
+			testValue.ExclusionPositions.Add(testExclusionPositions);
+			testList.Add(testValue);
+			BizUnitFlatfileCompareConfiguration testInstance = new BizUnitFlatfileCompareConfiguration();
+			testInstance.Exclusions = testList;
+			Assert.AreEqual(10, testInstance.Exclusions[0].ExclusionPositions[0].StartPosition);
+			Assert.AreEqual(20, testInstance.Exclusions[0].ExclusionPositions[0].EndPosition);
+		}
+
+		[Test]
 		public void FilterProperty()
 		{
 			string testValue = "testValue";
-			BizUnitCompare.FlatfileCompare.BizUnitFlatfileCompareConfiguration testInstance = new BizUnitCompare.FlatfileCompare.BizUnitFlatfileCompareConfiguration();
+			BizUnitFlatfileCompareConfiguration testInstance = new BizUnitFlatfileCompareConfiguration();
 			testInstance.Filter = testValue;
 			Assert.AreEqual(testValue, testInstance.Filter);
+		}
+
+		[Test]
+		public void GoalFilePathProperty()
+		{
+			string testValue = "testValue";
+			BizUnitFlatfileCompareConfiguration testInstance = new BizUnitFlatfileCompareConfiguration();
+			testInstance.GoalFilePath = testValue;
+			Assert.AreEqual(testValue, testInstance.GoalFilePath);
 		}
 
 		[Test]
 		public void SearchDirectoryProperty()
 		{
 			string testValue = "testValue";
-			BizUnitCompare.FlatfileCompare.BizUnitFlatfileCompareConfiguration testInstance = new BizUnitCompare.FlatfileCompare.BizUnitFlatfileCompareConfiguration();
+			BizUnitFlatfileCompareConfiguration testInstance = new BizUnitFlatfileCompareConfiguration();
 			testInstance.SearchDirectory = testValue;
 			Assert.AreEqual(testValue, testInstance.SearchDirectory);
 		}
@@ -54,52 +97,9 @@ namespace BizUnitCompareTests.FlatfileCompare
 		public void TimeoutProperty()
 		{
 			uint testValue = 10000;
-			BizUnitCompare.FlatfileCompare.BizUnitFlatfileCompareConfiguration testInstance = new BizUnitCompare.FlatfileCompare.BizUnitFlatfileCompareConfiguration();
+			BizUnitFlatfileCompareConfiguration testInstance = new BizUnitFlatfileCompareConfiguration();
 			testInstance.Timeout = testValue;
 			Assert.AreEqual(testValue, testInstance.Timeout);
 		}
-
-		[Test]
-		public void GoalFilePathProperty()
-		{
-			string testValue = "testValue";
-			BizUnitCompare.FlatfileCompare.BizUnitFlatfileCompareConfiguration testInstance = new BizUnitCompare.FlatfileCompare.BizUnitFlatfileCompareConfiguration();
-			testInstance.GoalFilePath = testValue;
-			Assert.AreEqual(testValue, testInstance.GoalFilePath);
-		}
-
-		[Test]
-		public void DeleteFileProperty()
-		{
-			bool testValue = false;
-			BizUnitCompare.FlatfileCompare.BizUnitFlatfileCompareConfiguration testInstance = new BizUnitCompare.FlatfileCompare.BizUnitFlatfileCompareConfiguration();
-			testInstance.DeleteFile = testValue;
-			Assert.AreEqual(testValue, testInstance.DeleteFile);
-		}
-
-		[Test]
-		public void ExclusionProperty()
-		{
-			List<BizUnitCompare.FlatfileCompare.Exclusion> testList = new List<BizUnitCompare.FlatfileCompare.Exclusion>();
-			BizUnitCompare.FlatfileCompare.Exclusion testValue = new BizUnitCompare.FlatfileCompare.Exclusion();
-			BizUnitCompare.FlatfileCompare.ExclusionPositions testExclusionPositions = new BizUnitCompare.FlatfileCompare.ExclusionPositions();
-			testExclusionPositions.StartPosition = 10;
-			testExclusionPositions.EndPosition = 20;
-			testValue.ExclusionPositions.Add(testExclusionPositions);
-			testList.Add(testValue);
-			BizUnitCompare.FlatfileCompare.BizUnitFlatfileCompareConfiguration testInstance = new BizUnitCompare.FlatfileCompare.BizUnitFlatfileCompareConfiguration();
-			testInstance.Exclusions = testList;
-			Assert.AreEqual(10, testInstance.Exclusions[0].ExclusionPositions[0].StartPosition);
-			Assert.AreEqual(20, testInstance.Exclusions[0].ExclusionPositions[0].EndPosition);
-		}
-
-		[Test]
-		public void Constructor()
-		{
-			BizUnitCompare.FlatfileCompare.BizUnitFlatfileCompareConfiguration testInstance = new BizUnitCompare.FlatfileCompare.BizUnitFlatfileCompareConfiguration();
-
-			Assert.IsNotNull(testInstance.Exclusions);
-		}
-		
 	}
 }

@@ -1,4 +1,5 @@
 ﻿#region License
+
 /*
 Copyright (c) 2010, Fredrik Arenhag
 All rights reserved.
@@ -20,27 +21,32 @@ OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABIL
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
 OF SUCH DAMAGE.
 */
+
 #endregion
 
-using System;
 using System.Collections.Generic;
-using System.Text;
-using NUnit.Framework;
 using System.IO;
+using System.Text;
+using BizUnitCompare.FlatfileCompare;
+using NUnit.Framework;
 
 namespace BizUnitCompareTests.FlatfileCompare
 {
 	[TestFixture]
-	class FlatfileCleanerTest
+	internal class FlatfileCleanerTest
 	{
-		private readonly string documentPath = Directory.GetCurrentDirectory() + @"\test.test";
+		#region Setup/Teardown
 
 		[SetUp]
 		[TearDown]
 		public void SetUpAndTearDown()
 		{
-			File.Delete(documentPath);
+			File.Delete(_documentPath);
 		}
+
+		#endregion
+
+		private readonly string _documentPath = Directory.GetCurrentDirectory() + @"\test.test";
 
 		[Test]
 		public void RemoveExclusions()
@@ -53,32 +59,32 @@ namespace BizUnitCompareTests.FlatfileCompare
 			expectedData.AppendLine("thisistheinput");
 			expectedData.AppendLine("should not be touched");
 
-			StreamWriter writer = File.CreateText(documentPath);
+			StreamWriter writer = File.CreateText(_documentPath);
 			writer.Write(inputData.ToString());
 			writer.Dispose();
 
-			List<BizUnitCompare.FlatfileCompare.Exclusion> exclusions = new List<BizUnitCompare.FlatfileCompare.Exclusion>();
-			BizUnitCompare.FlatfileCompare.Exclusion exclusion = new BizUnitCompare.FlatfileCompare.Exclusion();
+			List<Exclusion> exclusions = new List<Exclusion>();
+			Exclusion exclusion = new Exclusion();
 			exclusion.RowIdentifyingRegularExpression = "this";
 
-			BizUnitCompare.FlatfileCompare.ExclusionPositions position = new BizUnitCompare.FlatfileCompare.ExclusionPositions();
+			ExclusionPositions position = new ExclusionPositions();
 			position.StartPosition = 5;
 			position.EndPosition = 5;
 			exclusion.ExclusionPositions.Add(position);
-			
-			position = new BizUnitCompare.FlatfileCompare.ExclusionPositions();
+
+			position = new ExclusionPositions();
 			position.StartPosition = 8;
 			position.EndPosition = 8;
 			exclusion.ExclusionPositions.Add(position);
-			
-			position = new BizUnitCompare.FlatfileCompare.ExclusionPositions();
+
+			position = new ExclusionPositions();
 			position.StartPosition = 12;
 			position.EndPosition = 12;
 			exclusion.ExclusionPositions.Add(position);
 
 			exclusions.Add(exclusion);
 
-			MemoryStream returnStream = BizUnitCompare.FlatfileCompare.FlatfileCleaner.RemoveExclusions(documentPath, exclusions);
+			MemoryStream returnStream = FlatfileCleaner.RemoveExclusions(_documentPath, exclusions);
 			StreamReader returnReader = new StreamReader(returnStream);
 			string returnString = returnReader.ReadToEnd();
 			returnStream.Dispose();
