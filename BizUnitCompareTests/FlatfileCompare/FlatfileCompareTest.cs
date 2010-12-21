@@ -107,8 +107,8 @@ namespace BizUnitCompareTests.FlatfileCompare
 			outputData.AppendLine("should not be touched");
 
 			StringBuilder expectedData = new StringBuilder();
-			expectedData.AppendLine("thIs is the input");
-			expectedData.AppendLine("should not be touched");
+			expectedData.AppendLine("this is the input");
+			expectedData.AppendLine("shOuld not be touched");
 
 			testWriter.Write(outputData.ToString());
 			goalWriter.Write(expectedData.ToString());

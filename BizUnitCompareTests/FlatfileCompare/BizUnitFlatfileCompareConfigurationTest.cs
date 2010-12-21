@@ -19,6 +19,10 @@
 #endregion
 
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Xml;
+using BizUnit;
 using BizUnitCompare.FlatfileCompare;
 using NUnit.Framework;
 
@@ -27,6 +31,45 @@ namespace BizUnitCompareTests.FlatfileCompare
 	[TestFixture]
 	public class BizUnitFlatfileCompareConfigurationTest
 	{
+		private readonly string _testFilesPath = Directory.GetCurrentDirectory() + @"\FlatfileCompare\testFiles\";
+		private readonly XmlDocument _config = new XmlDocument();
+		private XmlNode _configPart;
+		private Context _context;
+
+		[SetUp]
+		[TearDown]
+		public void SetUp()
+		{
+			_config.Load(@"FlatfileCompare\testConfig.xml");
+			_configPart = _config.SelectSingleNode("/TestStep");
+
+			_context = new Context();
+			_context.Add("searchDirectory", _testFilesPath);
+			_context.Add("deleteFile", "false");
+			_context.Add("goalFile", _testFilesPath + "test.goal");
+			_context.Add("filter", "test.test");
+		}
+
+		[Test]
+		public void Load()
+		{
+			BizUnitFlatfileCompareConfiguration testInstance = new BizUnitFlatfileCompareConfiguration(_configPart, _context);
+
+			Assert.AreEqual(_context.GetValue("searchDirectory"), testInstance.SearchDirectory);
+			Assert.AreEqual(bool.Parse(_context.GetValue("deleteFile")), testInstance.DeleteFile);
+			Assert.AreEqual(_context.GetValue("goalFile"), testInstance.GoalFilePath);
+			Assert.AreEqual(_context.GetValue("filter"), testInstance.Filter);
+			Assert.AreEqual(1, testInstance.Exclusions.Count);
+			Assert.AreEqual(3, testInstance.Exclusions[0].ExclusionPositions.Count);
+			Assert.AreEqual("this", testInstance.Exclusions[0].RowIdentifyingRegularExpression);
+			Assert.AreEqual(5, testInstance.Exclusions[0].ExclusionPositions[0].StartPosition);
+			Assert.AreEqual(5, testInstance.Exclusions[0].ExclusionPositions[0].EndPosition);
+			Assert.AreEqual(8, testInstance.Exclusions[0].ExclusionPositions[1].StartPosition);
+			Assert.AreEqual(8, testInstance.Exclusions[0].ExclusionPositions[1].EndPosition);
+			Assert.AreEqual(12, testInstance.Exclusions[0].ExclusionPositions[2].StartPosition);
+			Assert.AreEqual(12, testInstance.Exclusions[0].ExclusionPositions[2].EndPosition);
+		}
+
 		[Test]
 		public void Constructor()
 		{
