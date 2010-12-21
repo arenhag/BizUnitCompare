@@ -28,7 +28,7 @@ using NUnit.Framework;
 namespace BizUnitCompareTests
 {
 	[TestFixture]
-	internal class BizUnitCompareTest
+	public class BizUnitCompareTest
 	{
 		private static FileStream PrepareFileSystem(BizUnitFlatfileCompareConfiguration configuration, string fileToCreatePath)
 		{

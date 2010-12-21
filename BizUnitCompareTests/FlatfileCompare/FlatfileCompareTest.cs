@@ -28,7 +28,7 @@ using NUnit.Framework;
 namespace BizUnitCompareTests.FlatfileCompare
 {
 	[TestFixture]
-	internal class FlatfileCompareTest
+	public class FlatfileCompareTest
 	{
 		#region Setup/Teardown
 

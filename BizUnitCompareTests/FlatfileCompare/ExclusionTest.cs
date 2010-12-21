@@ -25,7 +25,7 @@ using NUnit.Framework;
 namespace BizUnitCompareTests.FlatfileCompare
 {
 	[TestFixture]
-	internal class ExclusionTest
+	public class ExclusionTest
 	{
 		[Test]
 		public void Constructor()
