@@ -33,7 +33,7 @@ namespace BizUnitCompare
 			VerifyParameters(context, configuration);
 
 			context.LogInfo(string.Format(CultureInfo.CurrentCulture, "Waiting for file (in: {0}) for {1} seconds.", configuration.SearchDirectory, configuration.Timeout/1000));
-			DateTime endTime = DateTime.Now.AddMilliseconds(configuration.Timeout);
+		    DateTime endTime = DateTime.Now.AddMilliseconds(configuration.Timeout).AddMilliseconds(1);
 
 			bool fileFound = false;
 			string foundFilePath = string.Empty;
