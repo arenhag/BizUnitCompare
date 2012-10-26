@@ -26,12 +26,6 @@ namespace BizUnitCompare.XmlCompare
 {
     internal sealed class BizUnitXmlCompareConfiguration : BizUnitCompareConfiguration
     {
-        # region Backing property fields
-
-        # endregion
-
-        # region Property accessors
-
         internal bool IgnoreChildOrder { get; set; }
 
         internal bool IgnoreComments { get; set; }
@@ -41,8 +35,6 @@ namespace BizUnitCompare.XmlCompare
         internal List<Attribute> AttributesToExclude { get; set; }
 
         internal List<Replacement> StringsToSearchAndReplace { get; set; }
-
-        # endregion
 
         internal BizUnitXmlCompareConfiguration()
         {
