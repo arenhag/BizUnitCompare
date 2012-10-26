@@ -1,6 +1,6 @@
 ﻿#region License
 
-// Copyright (c) 2010, Fredrik Arenhag
+// Copyright (c) 2012, Fredrik Arenhag
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without modification,
@@ -26,64 +26,64 @@ using NUnit.Framework;
 
 namespace BizUnitCompareTests.FlatfileCompare
 {
-	[TestFixture]
-	public class FlatfileCleanerTest
-	{
-		#region Setup/Teardown
+    [TestFixture]
+    public class FlatfileCleanerTest
+    {
+        #region Setup/Teardown
 
-		[SetUp]
-		[TearDown]
-		public void SetUpAndTearDown()
-		{
-			File.Delete(_documentPath);
-		}
+        [SetUp]
+        [TearDown]
+        public void SetUpAndTearDown()
+        {
+            File.Delete(_documentPath);
+        }
 
-		#endregion
+        #endregion
 
-		private readonly string _documentPath = Directory.GetCurrentDirectory() + @"\test.test";
+        private readonly string _documentPath = Directory.GetCurrentDirectory() + @"\test.test";
 
-		[Test]
-		public void RemoveExclusions()
-		{
-			StringBuilder inputData = new StringBuilder();
-			inputData.AppendLine("this is the input");
-			inputData.AppendLine("should not be touched");
+        [Test]
+        public void RemoveExclusions()
+        {
+            var inputData = new StringBuilder();
+            inputData.AppendLine("this is the input");
+            inputData.AppendLine("should not be touched");
 
-			StringBuilder expectedData = new StringBuilder();
-			expectedData.AppendLine("thisistheinput");
-			expectedData.AppendLine("should not be touched");
+            var expectedData = new StringBuilder();
+            expectedData.AppendLine("thisistheinput");
+            expectedData.AppendLine("should not be touched");
 
-			StreamWriter writer = File.CreateText(_documentPath);
-			writer.Write(inputData.ToString());
-			writer.Dispose();
+            StreamWriter writer = File.CreateText(_documentPath);
+            writer.Write(inputData.ToString());
+            writer.Dispose();
 
-			List<Exclusion> exclusions = new List<Exclusion>();
-			Exclusion exclusion = new Exclusion();
-			exclusion.RowIdentifyingRegularExpression = "this";
+            var exclusions = new List<Exclusion>();
+            var exclusion = new Exclusion();
+            exclusion.RowIdentifyingRegularExpression = "this";
 
-			ExclusionPositions position = new ExclusionPositions();
-			position.StartPosition = 5;
-			position.EndPosition = 5;
-			exclusion.ExclusionPositions.Add(position);
+            var position = new ExclusionPositions();
+            position.StartPosition = 5;
+            position.EndPosition = 5;
+            exclusion.ExclusionPositions.Add(position);
 
-			position = new ExclusionPositions();
-			position.StartPosition = 8;
-			position.EndPosition = 8;
-			exclusion.ExclusionPositions.Add(position);
+            position = new ExclusionPositions();
+            position.StartPosition = 8;
+            position.EndPosition = 8;
+            exclusion.ExclusionPositions.Add(position);
 
-			position = new ExclusionPositions();
-			position.StartPosition = 12;
-			position.EndPosition = 12;
-			exclusion.ExclusionPositions.Add(position);
+            position = new ExclusionPositions();
+            position.StartPosition = 12;
+            position.EndPosition = 12;
+            exclusion.ExclusionPositions.Add(position);
 
-			exclusions.Add(exclusion);
+            exclusions.Add(exclusion);
 
-			MemoryStream returnStream = FlatfileCleaner.RemoveExclusions(_documentPath, exclusions);
-			StreamReader returnReader = new StreamReader(returnStream);
-			string returnString = returnReader.ReadToEnd();
-			returnStream.Dispose();
+            MemoryStream returnStream = FlatfileCleaner.RemoveExclusions(_documentPath, exclusions);
+            var returnReader = new StreamReader(returnStream);
+            string returnString = returnReader.ReadToEnd();
+            returnStream.Dispose();
 
-			Assert.AreEqual(expectedData.ToString(), returnString);
-		}
-	}
+            Assert.AreEqual(expectedData.ToString(), returnString);
+        }
+    }
 }

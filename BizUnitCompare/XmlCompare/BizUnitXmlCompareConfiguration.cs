@@ -1,6 +1,6 @@
 #region License
 
-// Copyright (c) 2010, Fredrik Arenhag
+// Copyright (c) 2012, Fredrik Arenhag
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without modification,
@@ -24,138 +24,112 @@ using BizUnit;
 
 namespace BizUnitCompare.XmlCompare
 {
-	internal sealed class BizUnitXmlCompareConfiguration : BizUnitCompareConfiguration
-	{
-		# region Backing property fields
+    internal sealed class BizUnitXmlCompareConfiguration : BizUnitCompareConfiguration
+    {
+        # region Backing property fields
 
-		private List<Attribute> _attributesToExclude;
-		private List<string> _elementsToExclude;
-		private bool _ignoreChildOrder;
-		private bool _ignoreComments;
-		private List<Replacement> _stringsToSearchAndReplace;
+        # endregion
 
-		# endregion
+        # region Property accessors
 
-		# region Property accessors
+        internal bool IgnoreChildOrder { get; set; }
 
-		internal bool IgnoreChildOrder
-		{
-			get { return _ignoreChildOrder; }
-			set { _ignoreChildOrder = value; }
-		}
+        internal bool IgnoreComments { get; set; }
 
-		internal bool IgnoreComments
-		{
-			get { return _ignoreComments; }
-			set { _ignoreComments = value; }
-		}
+        internal List<string> ElementsToExclude { get; set; }
 
-		internal List<string> ElementsToExclude
-		{
-			get { return _elementsToExclude; }
-			set { _elementsToExclude = value; }
-		}
+        internal List<Attribute> AttributesToExclude { get; set; }
 
-		internal List<Attribute> AttributesToExclude
-		{
-			get { return _attributesToExclude; }
-			set { _attributesToExclude = value; }
-		}
+        internal List<Replacement> StringsToSearchAndReplace { get; set; }
 
-		internal List<Replacement> StringsToSearchAndReplace
-		{
-			get { return _stringsToSearchAndReplace; }
-			set { _stringsToSearchAndReplace = value; }
-		}
+        # endregion
 
-		# endregion
+        internal BizUnitXmlCompareConfiguration()
+        {
+            ElementsToExclude = new List<string>();
+            AttributesToExclude = new List<Attribute>();
+            StringsToSearchAndReplace = new List<Replacement>();
+        }
 
-		internal BizUnitXmlCompareConfiguration()
-		{
-			ElementsToExclude = new List<string>();
-			AttributesToExclude = new List<Attribute>();
-			StringsToSearchAndReplace = new List<Replacement>();
-		}
+        internal BizUnitXmlCompareConfiguration(XmlNode testConfig, Context context)
+        {
+            Load(testConfig, context);
+        }
 
-		internal BizUnitXmlCompareConfiguration(XmlNode testConfig, Context context)
-		{
-			Load(testConfig, context);
-		}
+        internal override void Load(XmlNode testConfig, Context context)
+        {
+            GoalFilePath = context.ReadConfigAsString(testConfig, "GoalFile");
+            SearchDirectory = context.ReadConfigAsString(testConfig, "SearchDirectory");
+            Filter = context.ReadConfigAsString(testConfig, "Filter");
+            Timeout = context.ReadConfigAsUInt32(testConfig, "Timeout");
+            DeleteFile = context.ReadConfigAsBool(testConfig, "DeleteFile", true);
+            IgnoreChildOrder = context.ReadConfigAsBool(testConfig, "IgnoreChildOrder", true);
+            IgnoreComments = context.ReadConfigAsBool(testConfig, "IgnoreComments", true);
+            ElementsToExclude = ParseElementExclusions(testConfig);
+            AttributesToExclude = ParseAttributeExclusions(testConfig);
+            StringsToSearchAndReplace = ParseReplacements(testConfig);
+        }
 
-		internal override void Load(XmlNode testConfig, Context context)
-		{
-			GoalFilePath = context.ReadConfigAsString(testConfig, "GoalFile");
-			SearchDirectory = context.ReadConfigAsString(testConfig, "SearchDirectory");
-			Filter = context.ReadConfigAsString(testConfig, "Filter");
-			Timeout = context.ReadConfigAsUInt32(testConfig, "Timeout");
-			DeleteFile = context.ReadConfigAsBool(testConfig, "DeleteFile", true);
-			IgnoreChildOrder = context.ReadConfigAsBool(testConfig, "IgnoreChildOrder", true);
-			IgnoreComments = context.ReadConfigAsBool(testConfig, "IgnoreComments", true);
-			ElementsToExclude = ParseElementExclusions(testConfig);
-			AttributesToExclude = ParseAttributeExclusions(testConfig);
-			StringsToSearchAndReplace = ParseReplacements(testConfig);
-		}
+        private static List<Attribute> ParseAttributeExclusions(XmlNode testConfig)
+        {
+            var attributesToExclude = new List<Attribute>();
+            XmlNodeList configuredAttributesToExclude = testConfig.SelectNodes("Exclusions/Attribute/ParentElement");
+            if (configuredAttributesToExclude != null)
+            {
+                foreach (XmlNode attributeExclude in configuredAttributesToExclude)
+                {
+                    var attribute = new Attribute();
+                    attribute.ParentElementXPath = attributeExclude.InnerText;
+                    if (attributeExclude.NextSibling != null) attribute.Name = attributeExclude.NextSibling.InnerText;
+                    attributesToExclude.Add(attribute);
+                }
+            }
+            return attributesToExclude;
+        }
 
-		private static List<Attribute> ParseAttributeExclusions(XmlNode testConfig)
-		{
-			List<Attribute> attributesToExclude = new List<Attribute>();
-			XmlNodeList configuredAttributesToExclude = testConfig.SelectNodes("Exclusions/Attribute/ParentElement");
-			if (configuredAttributesToExclude != null)
-			{
-				foreach (XmlNode attributeExclude in configuredAttributesToExclude)
-				{
-					Attribute attribute = new Attribute();
-					attribute.ParentElementXPath = attributeExclude.InnerText;
-					if (attributeExclude.NextSibling != null) attribute.Name = attributeExclude.NextSibling.InnerText;
-					attributesToExclude.Add(attribute);
-				}
-			}
-			return attributesToExclude;
-		}
+        private static List<string> ParseElementExclusions(XmlNode testConfig)
+        {
+            var elementsToExclude = new List<string>();
+            XmlNodeList configuredElementsToExclude = testConfig.SelectNodes("Exclusions/Element");
+            if (configuredElementsToExclude != null)
+            {
+                foreach (XmlNode toExclude in configuredElementsToExclude)
+                {
+                    elementsToExclude.Add(toExclude.InnerText);
+                }
+            }
+            return elementsToExclude;
+        }
 
-		private static List<string> ParseElementExclusions(XmlNode testConfig)
-		{
-			List<string> elementsToExclude = new List<string>();
-			XmlNodeList configuredElementsToExclude = testConfig.SelectNodes("Exclusions/Element");
-			if (configuredElementsToExclude != null)
-			{
-				foreach (XmlNode toExclude in configuredElementsToExclude)
-				{
-					elementsToExclude.Add(toExclude.InnerText);
-				}
-			}
-			return elementsToExclude;
-		}
-
-		private static List<Replacement> ParseReplacements(XmlNode testConfig)
-		{
-			List<Replacement> stringsToSearchAndReplace = new List<Replacement>();
-			XmlNodeList configuredReplacements = testConfig.SelectNodes("Replacements/Replace");
-			if (configuredReplacements != null)
-			{
-				foreach (XmlNode configuredReplacement in configuredReplacements)
-				{
-					Replacement replacement = new Replacement();
-					XmlNodeList children = configuredReplacement.ChildNodes;
-					foreach (XmlNode child in children)
-					{
-						XmlCDataSection data;
-						switch (child.Name)
-						{
-							case "OldString":
-								data = child.FirstChild as XmlCDataSection;
-								replacement.OldString = data != null ? data.Value : string.Empty;
-								break;
-							case "NewString":
-								data = child.FirstChild as XmlCDataSection;
-								replacement.NewString = data != null ? data.Value : string.Empty;
-								break;
-						}
-					}
-					stringsToSearchAndReplace.Add(replacement);
-				}
-			}
-			return stringsToSearchAndReplace;
-		}
-	}
+        private static List<Replacement> ParseReplacements(XmlNode testConfig)
+        {
+            var stringsToSearchAndReplace = new List<Replacement>();
+            XmlNodeList configuredReplacements = testConfig.SelectNodes("Replacements/Replace");
+            if (configuredReplacements != null)
+            {
+                foreach (XmlNode configuredReplacement in configuredReplacements)
+                {
+                    var replacement = new Replacement();
+                    XmlNodeList children = configuredReplacement.ChildNodes;
+                    foreach (XmlNode child in children)
+                    {
+                        XmlCDataSection data;
+                        switch (child.Name)
+                        {
+                            case "OldString":
+                                data = child.FirstChild as XmlCDataSection;
+                                replacement.OldString = data != null ? data.Value : string.Empty;
+                                break;
+                            case "NewString":
+                                data = child.FirstChild as XmlCDataSection;
+                                replacement.NewString = data != null ? data.Value : string.Empty;
+                                break;
+                        }
+                    }
+                    stringsToSearchAndReplace.Add(replacement);
+                }
+            }
+            return stringsToSearchAndReplace;
+        }
+    }
 }

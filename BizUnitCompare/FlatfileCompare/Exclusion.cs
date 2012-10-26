@@ -1,6 +1,6 @@
 #region License
 
-// Copyright (c) 2010, Fredrik Arenhag
+// Copyright (c) 2012, Fredrik Arenhag
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without modification,
@@ -22,57 +22,43 @@ using System.Collections.Generic;
 
 namespace BizUnitCompare.FlatfileCompare
 {
-	internal class Exclusion
-	{
-		private List<ExclusionPositions> _exclusionPositions;
-		private string _rowIdentifyingRegularExpression;
+    internal class Exclusion
+    {
+        internal Exclusion()
+        {
+            ExclusionPositions = new List<ExclusionPositions>();
+        }
 
-		internal Exclusion()
-		{
-			ExclusionPositions = new List<ExclusionPositions>();
-		}
+        internal string RowIdentifyingRegularExpression { get; set; }
 
-		internal string RowIdentifyingRegularExpression
-		{
-			get { return _rowIdentifyingRegularExpression; }
-			set { _rowIdentifyingRegularExpression = value; }
-		}
+        internal List<ExclusionPositions> ExclusionPositions { get; set; }
 
-		internal List<ExclusionPositions> ExclusionPositions
-		{
-			get { return _exclusionPositions; }
-			set { _exclusionPositions = value; }
-		}
+        internal bool[] ExclusionBitMap
+        {
+            get { return CalculateBitmap(); }
+        }
 
-		internal bool[] ExclusionBitMap
-		{
-			get
-			{
-			    return CalculateBitmap();
-			}
-		}
+        private bool[] CalculateBitmap()
+        {
+            int bitmapLength = 0;
+            foreach (ExclusionPositions exclusionPosition in ExclusionPositions)
+            {
+                if (exclusionPosition.EndPosition > bitmapLength)
+                {
+                    bitmapLength = exclusionPosition.EndPosition;
+                }
+            }
 
-	    private bool[] CalculateBitmap()
-	    {
-	        int bitmapLength = 0;
-	        foreach (ExclusionPositions exclusionPosition in ExclusionPositions)
-	        {
-	            if (exclusionPosition.EndPosition > bitmapLength)
-	            {
-	                bitmapLength = exclusionPosition.EndPosition;
-	            }
-	        }
+            var bitmap = new bool[bitmapLength];
 
-	        bool[] bitmap = new bool[bitmapLength];
-
-	        foreach (ExclusionPositions exclusionPositions in ExclusionPositions)
-	        {
-	            for (int i = exclusionPositions.StartPosition - 1; i < exclusionPositions.EndPosition; i++)
-	            {
-	                bitmap[i] = true;
-	            }
-	        }
-	        return bitmap;
-	    }
-	}
+            foreach (ExclusionPositions exclusionPositions in ExclusionPositions)
+            {
+                for (int i = exclusionPositions.StartPosition - 1; i < exclusionPositions.EndPosition; i++)
+                {
+                    bitmap[i] = true;
+                }
+            }
+            return bitmap;
+        }
+    }
 }

@@ -1,6 +1,6 @@
 #region License
 
-// Copyright (c) 2010, Fredrik Arenhag
+// Copyright (c) 2012, Fredrik Arenhag
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without modification,
@@ -24,20 +24,20 @@ using BizUnit;
 
 namespace BizUnitCompareTestClient.XmlCompare
 {
-	internal class XmlCompareTest
-	{
-		internal void Test()
-		{
-			XmlDocument config = new XmlDocument();
-			Context context = new Context();
+    internal class XmlCompareTest
+    {
+        internal void Test()
+        {
+            var config = new XmlDocument();
+            var context = new Context();
 
-			config.Load(@"XmlCompare\testConfig.xml");
-			XmlNode configPart = config.SelectSingleNode("/TestStep");
+            config.Load(@"XmlCompare\testConfig.xml");
+            XmlNode configPart = config.SelectSingleNode("/TestStep");
 
-			context.Add("searchDirectory", Directory.GetCurrentDirectory() + @"\XmlCompare");
-			BizUnitCompare.XmlCompare.XmlCompare comparer = new BizUnitCompare.XmlCompare.XmlCompare();
+            context.Add("searchDirectory", Directory.GetCurrentDirectory() + @"\XmlCompare");
+            var comparer = new BizUnitCompare.XmlCompare.XmlCompare();
 
-			comparer.Execute(configPart, context);
-		}
-	}
+            comparer.Execute(configPart, context);
+        }
+    }
 }

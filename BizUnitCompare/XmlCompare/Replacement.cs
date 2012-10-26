@@ -1,6 +1,6 @@
 #region License
 
-// Copyright (c) 2010, Fredrik Arenhag
+// Copyright (c) 2012, Fredrik Arenhag
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without modification,
@@ -20,21 +20,10 @@
 
 namespace BizUnitCompare.XmlCompare
 {
-	internal class Replacement
-	{
-		private string _newString;
-		private string _oldString;
+    internal class Replacement
+    {
+        internal string OldString { get; set; }
 
-		internal string OldString
-		{
-			get { return _oldString; }
-			set { _oldString = value; }
-		}
-
-		internal string NewString
-		{
-			get { return _newString; }
-			set { _newString = value; }
-		}
-	}
+        internal string NewString { get; set; }
+    }
 }

@@ -1,6 +1,6 @@
 #region License
 
-// Copyright (c) 2010, Fredrik Arenhag
+// Copyright (c) 2012, Fredrik Arenhag
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without modification,
@@ -20,21 +20,10 @@
 
 namespace BizUnitCompare.FlatfileCompare
 {
-	internal class ExclusionPositions
-	{
-		private int _endPosition;
-		private int _startPosition;
+    internal class ExclusionPositions
+    {
+        internal int EndPosition { get; set; }
 
-		internal int EndPosition
-		{
-			get { return _endPosition; }
-			set { _endPosition = value; }
-		}
-
-		internal int StartPosition
-		{
-			get { return _startPosition; }
-			set { _startPosition = value; }
-		}
-	}
+        internal int StartPosition { get; set; }
+    }
 }

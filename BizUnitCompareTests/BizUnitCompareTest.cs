@@ -1,6 +1,6 @@
 ﻿#region License
 
-// Copyright (c) 2010, Fredrik Arenhag
+// Copyright (c) 2012, Fredrik Arenhag
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without modification,
@@ -27,124 +27,124 @@ using NUnit.Framework;
 
 namespace BizUnitCompareTests
 {
-	[TestFixture]
-	public class BizUnitCompareTest
-	{
-		private static FileStream PrepareFileSystem(BizUnitFlatfileCompareConfiguration configuration, string fileToCreatePath)
-		{
-			CleanFileSystem(configuration);
-			return File.Create(fileToCreatePath);
-		}
+    [TestFixture]
+    public class BizUnitCompareTest
+    {
+        private static FileStream PrepareFileSystem(BizUnitFlatfileCompareConfiguration configuration, string fileToCreatePath)
+        {
+            CleanFileSystem(configuration);
+            return File.Create(fileToCreatePath);
+        }
 
-		private static void CleanFileSystem(BizUnitFlatfileCompareConfiguration configuration)
-		{
-			foreach (string filePath in Directory.GetFiles(configuration.SearchDirectory, configuration.Filter))
-			{
-				File.Delete(filePath);
-			}
-		}
+        private static void CleanFileSystem(BizUnitFlatfileCompareConfiguration configuration)
+        {
+            foreach (string filePath in Directory.GetFiles(configuration.SearchDirectory, configuration.Filter))
+            {
+                File.Delete(filePath);
+            }
+        }
 
-		[Test]
-		public void GetFoundFileDirectoryNotFoundException()
-		{
-			Context context = new Context();
-			BizUnitFlatfileCompareConfiguration configuration = new BizUnitFlatfileCompareConfiguration();
+        [Test]
+        public void GetFoundFileDirectoryNotFoundException()
+        {
+            var context = new Context();
+            var configuration = new BizUnitFlatfileCompareConfiguration();
 
-			configuration.SearchDirectory = @"c:\thisFolderShouldnotExist";
-			configuration.Filter = "*.should.not.be.found";
-			configuration.Timeout = 1000;
-			Assert.Throws<DirectoryNotFoundException>(delegate { BizUnitCompare.BizUnitCompare.GetFoundFilePath(context, configuration); });
-		}
+            configuration.SearchDirectory = @"c:\thisFolderShouldnotExist";
+            configuration.Filter = "*.should.not.be.found";
+            configuration.Timeout = 1000;
+            Assert.Throws<DirectoryNotFoundException>(delegate { BizUnitCompare.BizUnitCompare.GetFoundFilePath(context, configuration); });
+        }
 
-		[Test]
-		public void GetFoundFileFindFile()
-		{
-			Context context = new Context();
-			BizUnitFlatfileCompareConfiguration configuration = new BizUnitFlatfileCompareConfiguration();
+        [Test]
+        public void GetFoundFileFindFile()
+        {
+            var context = new Context();
+            var configuration = new BizUnitFlatfileCompareConfiguration();
 
-			configuration.SearchDirectory = Directory.GetCurrentDirectory();
-			configuration.Filter = "*.test";
-			configuration.Timeout = 1000;
+            configuration.SearchDirectory = Directory.GetCurrentDirectory();
+            configuration.Filter = "*.test";
+            configuration.Timeout = 1000;
 
-			string fileToCreatePath = Directory.GetCurrentDirectory() + @"\test.test";
+            string fileToCreatePath = Directory.GetCurrentDirectory() + @"\test.test";
 
-			FileStream fileStream = PrepareFileSystem(configuration, fileToCreatePath);
-			fileStream.Dispose();
+            FileStream fileStream = PrepareFileSystem(configuration, fileToCreatePath);
+            fileStream.Dispose();
 
-			string foundFile = BizUnitCompare.BizUnitCompare.GetFoundFilePath(context, configuration);
-			Assert.AreEqual(fileToCreatePath, foundFile);
-		}
+            string foundFile = BizUnitCompare.BizUnitCompare.GetFoundFilePath(context, configuration);
+            Assert.AreEqual(fileToCreatePath, foundFile);
+        }
 
-		[Test]
-		public void GetFoundFileLockedFile()
-		{
-			Context context = new Context();
-			BizUnitFlatfileCompareConfiguration configuration = new BizUnitFlatfileCompareConfiguration();
+        [Test]
+        public void GetFoundFileLockedFile()
+        {
+            var context = new Context();
+            var configuration = new BizUnitFlatfileCompareConfiguration();
 
-			configuration.SearchDirectory = Directory.GetCurrentDirectory();
-			configuration.Filter = "*.test";
-			configuration.Timeout = 1000;
+            configuration.SearchDirectory = Directory.GetCurrentDirectory();
+            configuration.Filter = "*.test";
+            configuration.Timeout = 1000;
 
-			string fileToCreatePath = Directory.GetCurrentDirectory() + @"\test.test";
+            string fileToCreatePath = Directory.GetCurrentDirectory() + @"\test.test";
 
-			FileStream fileStream = PrepareFileSystem(configuration, fileToCreatePath);
-			Assert.Throws<FileNotFoundException>(delegate { BizUnitCompare.BizUnitCompare.GetFoundFilePath(context, configuration); });
-			fileStream.Dispose();
-		}
+            FileStream fileStream = PrepareFileSystem(configuration, fileToCreatePath);
+            Assert.Throws<FileNotFoundException>(delegate { BizUnitCompare.BizUnitCompare.GetFoundFilePath(context, configuration); });
+            fileStream.Dispose();
+        }
 
-		[Test]
-		public void GetFoundFilePathArgumentException()
-		{
-			Context context = new Context();
-			BizUnitFlatfileCompareConfiguration configuration = new BizUnitFlatfileCompareConfiguration();
+        [Test]
+        public void GetFoundFilePathArgumentException()
+        {
+            var context = new Context();
+            var configuration = new BizUnitFlatfileCompareConfiguration();
 
-			configuration.SearchDirectory = @"";
-			configuration.Filter = "*.should.not.be.found";
-			configuration.Timeout = 1000;
-			Assert.Throws<ArgumentException>(delegate { BizUnitCompare.BizUnitCompare.GetFoundFilePath(context, configuration); });
-			Assert.Throws<ArgumentNullException>(delegate { BizUnitCompare.BizUnitCompare.GetFoundFilePath(context, null); });
-			Assert.Throws<ArgumentNullException>(delegate { BizUnitCompare.BizUnitCompare.GetFoundFilePath(null, configuration); });
-			Assert.Throws<ArgumentNullException>(delegate { BizUnitCompare.BizUnitCompare.GetFoundFilePath(null, null); });
-		}
+            configuration.SearchDirectory = @"";
+            configuration.Filter = "*.should.not.be.found";
+            configuration.Timeout = 1000;
+            Assert.Throws<ArgumentException>(delegate { BizUnitCompare.BizUnitCompare.GetFoundFilePath(context, configuration); });
+            Assert.Throws<ArgumentNullException>(delegate { BizUnitCompare.BizUnitCompare.GetFoundFilePath(context, null); });
+            Assert.Throws<ArgumentNullException>(delegate { BizUnitCompare.BizUnitCompare.GetFoundFilePath(null, configuration); });
+            Assert.Throws<ArgumentNullException>(delegate { BizUnitCompare.BizUnitCompare.GetFoundFilePath(null, null); });
+        }
 
-		[Test]
-		public void GetFoundFilePathFileNotFound()
-		{
-			Context context = new Context();
-			BizUnitFlatfileCompareConfiguration configuration = new BizUnitFlatfileCompareConfiguration();
+        [Test]
+        public void GetFoundFilePathFileNotFound()
+        {
+            var context = new Context();
+            var configuration = new BizUnitFlatfileCompareConfiguration();
 
-			configuration.SearchDirectory = Directory.GetCurrentDirectory();
-			configuration.Filter = "*.should.not.be.found";
-			configuration.Timeout = 200;
-			Assert.Throws<FileNotFoundException>(delegate { BizUnitCompare.BizUnitCompare.GetFoundFilePath(context, configuration); });
-		}
+            configuration.SearchDirectory = Directory.GetCurrentDirectory();
+            configuration.Filter = "*.should.not.be.found";
+            configuration.Timeout = 200;
+            Assert.Throws<FileNotFoundException>(delegate { BizUnitCompare.BizUnitCompare.GetFoundFilePath(context, configuration); });
+        }
 
-		[Test]
-		public void GetFoundFileTimeout()
-		{
-			Context context = new Context();
-			BizUnitFlatfileCompareConfiguration configuration = new BizUnitFlatfileCompareConfiguration();
+        [Test]
+        public void GetFoundFileTimeout()
+        {
+            var context = new Context();
+            var configuration = new BizUnitFlatfileCompareConfiguration();
 
-			configuration.SearchDirectory = @"c:\";
-			configuration.Filter = "*.should.not.be.found";
-			configuration.Timeout = 1000;
+            configuration.SearchDirectory = @"c:\";
+            configuration.Filter = "*.should.not.be.found";
+            configuration.Timeout = 1000;
 
-			Stopwatch stopwatch = new Stopwatch();
-			try
-			{
-				stopwatch.Start();
-				BizUnitCompare.BizUnitCompare.GetFoundFilePath(context, configuration);
-				stopwatch.Stop();
-			}
+            var stopwatch = new Stopwatch();
+            try
+            {
+                stopwatch.Start();
+                BizUnitCompare.BizUnitCompare.GetFoundFilePath(context, configuration);
+                stopwatch.Stop();
+            }
 // ReSharper disable EmptyGeneralCatchClause
-			catch (Exception)
+            catch (Exception)
 // ReSharper restore EmptyGeneralCatchClause
-			{
-			}
-			long millisecondsPassed = stopwatch.ElapsedMilliseconds;
+            {
+            }
+            long millisecondsPassed = stopwatch.ElapsedMilliseconds;
 
-			Assert.GreaterOrEqual(millisecondsPassed, configuration.Timeout);
-			Assert.LessOrEqual(millisecondsPassed, configuration.Timeout + 120); // 120 is added since the thread sleep is set to 100 ms, 20 ms for added execution time
-		}
-	}
+            Assert.GreaterOrEqual(millisecondsPassed, configuration.Timeout);
+            Assert.LessOrEqual(millisecondsPassed, configuration.Timeout + 120); // 120 is added since the thread sleep is set to 100 ms, 20 ms for added execution time
+        }
+    }
 }

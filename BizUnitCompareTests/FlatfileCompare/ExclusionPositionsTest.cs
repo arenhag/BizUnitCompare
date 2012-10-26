@@ -1,6 +1,6 @@
 ﻿#region License
 
-// Copyright (c) 2010, Fredrik Arenhag
+// Copyright (c) 2012, Fredrik Arenhag
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without modification,
@@ -23,25 +23,25 @@ using NUnit.Framework;
 
 namespace BizUnitCompareTests.FlatfileCompare
 {
-	[TestFixture]
-	public class ExclusionPositionsTest
-	{
-		[Test]
-		public void EndPosition()
-		{
-			ExclusionPositions testInstance = new ExclusionPositions();
-			testInstance.EndPosition = 10;
+    [TestFixture]
+    public class ExclusionPositionsTest
+    {
+        [Test]
+        public void EndPosition()
+        {
+            var testInstance = new ExclusionPositions();
+            testInstance.EndPosition = 10;
 
-			Assert.AreEqual(10, testInstance.EndPosition);
-		}
+            Assert.AreEqual(10, testInstance.EndPosition);
+        }
 
-		[Test]
-		public void StartPosition()
-		{
-			ExclusionPositions testInstance = new ExclusionPositions();
-			testInstance.StartPosition = 6;
+        [Test]
+        public void StartPosition()
+        {
+            var testInstance = new ExclusionPositions();
+            testInstance.StartPosition = 6;
 
-			Assert.AreEqual(6, testInstance.StartPosition);
-		}
-	}
+            Assert.AreEqual(6, testInstance.StartPosition);
+        }
+    }
 }

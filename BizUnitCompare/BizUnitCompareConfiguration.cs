@@ -1,6 +1,6 @@
 #region License
 
-// Copyright (c) 2010, Fredrik Arenhag
+// Copyright (c) 2012, Fredrik Arenhag
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without modification,
@@ -23,44 +23,18 @@ using BizUnit;
 
 namespace BizUnitCompare
 {
-	internal abstract class BizUnitCompareConfiguration
-	{
-		private bool _deleteFile;
-		private string _filter;
-		private string _goalFilePath;
-		private string _searchDirectory;
-		private uint _timeout;
+    internal abstract class BizUnitCompareConfiguration
+    {
+        internal bool DeleteFile { get; set; }
 
-		internal bool DeleteFile
-		{
-			get { return _deleteFile; }
-			set { _deleteFile = value; }
-		}
+        internal string GoalFilePath { get; set; }
 
-		internal string GoalFilePath
-		{
-			get { return _goalFilePath; }
-			set { _goalFilePath = value; }
-		}
+        internal string Filter { get; set; }
 
-		internal string Filter
-		{
-			get { return _filter; }
-			set { _filter = value; }
-		}
+        internal string SearchDirectory { get; set; }
 
-		internal string SearchDirectory
-		{
-			get { return _searchDirectory; }
-			set { _searchDirectory = value; }
-		}
+        internal uint Timeout { get; set; }
 
-		internal uint Timeout
-		{
-			get { return _timeout; }
-			set { _timeout = value; }
-		}
-
-		internal abstract void Load(XmlNode testConfig, Context context);
-	}
+        internal abstract void Load(XmlNode testConfig, Context context);
+    }
 }

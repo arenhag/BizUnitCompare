@@ -1,6 +1,6 @@
 #region License
 
-// Copyright (c) 2010, Fredrik Arenhag
+// Copyright (c) 2012, Fredrik Arenhag
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without modification,
@@ -24,25 +24,25 @@ using BizUnitCompareTestClient.XmlCompare;
 
 namespace BizUnitCompareTestClient
 {
-	internal class Program
-	{
-		private static void Main()
-		{
-			Console.WriteLine("===== LAUNCHING XML COMPARE TEST =====");
-			XmlCompareTest xmlCompareTest = new XmlCompareTest();
-			xmlCompareTest.Test();
-			Console.WriteLine("===== XML COMPARE TEST COMPLETE =====");
+    internal class Program
+    {
+        private static void Main()
+        {
+            Console.WriteLine("===== LAUNCHING XML COMPARE TEST =====");
+            var xmlCompareTest = new XmlCompareTest();
+            xmlCompareTest.Test();
+            Console.WriteLine("===== XML COMPARE TEST COMPLETE =====");
 
-			Console.WriteLine();
+            Console.WriteLine();
 
-			Console.WriteLine("===== LAUNCHING FLATFILE COMPARE TEST =====");
-			FlatfileCompareTest flatfileCompareTest = new FlatfileCompareTest();
-			flatfileCompareTest.Test();
-			Console.WriteLine("===== FLATFILE COMPARE TEST COMPLETE =====");
+            Console.WriteLine("===== LAUNCHING FLATFILE COMPARE TEST =====");
+            var flatfileCompareTest = new FlatfileCompareTest();
+            flatfileCompareTest.Test();
+            Console.WriteLine("===== FLATFILE COMPARE TEST COMPLETE =====");
 
-			Console.WriteLine();
-			Console.WriteLine(Environment.NewLine + "Press enter to quit.");
-			Console.ReadLine();
-		}
-	}
+            Console.WriteLine();
+            Console.WriteLine(Environment.NewLine + "Press enter to quit.");
+            Console.ReadLine();
+        }
+    }
 }

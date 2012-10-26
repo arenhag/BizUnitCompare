@@ -1,6 +1,6 @@
 #region License
 
-// Copyright (c) 2010, Fredrik Arenhag
+// Copyright (c) 2012, Fredrik Arenhag
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without modification,
@@ -20,21 +20,10 @@
 
 namespace BizUnitCompare.XmlCompare
 {
-	internal class Attribute
-	{
-		private string _name;
-		private string _parentElementXPath;
+    internal class Attribute
+    {
+        internal string ParentElementXPath { get; set; }
 
-		internal string ParentElementXPath
-		{
-			get { return _parentElementXPath; }
-			set { _parentElementXPath = value; }
-		}
-
-		internal string Name
-		{
-			get { return _name; }
-			set { _name = value; }
-		}
-	}
+        internal string Name { get; set; }
+    }
 }

@@ -1,6 +1,6 @@
 #region License
 
-// Copyright (c) 2010, Fredrik Arenhag
+// Copyright (c) 2012, Fredrik Arenhag
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without modification,
@@ -24,45 +24,45 @@ using System.Xml;
 
 namespace BizUnitCompare.XmlCompare
 {
-	internal static class XmlDocumentCleaner
-	{
-		internal static string ReplaceInDocument(string documentPath, IEnumerable<Replacement> replacements)
-		{
-			string newString;
-			using (FileStream stream = new FileStream(documentPath, FileMode.Open, FileAccess.Read, FileShare.Read))
-			{
-				newString = new StreamReader(stream).ReadToEnd();
+    internal static class XmlDocumentCleaner
+    {
+        internal static string ReplaceInDocument(string documentPath, IEnumerable<Replacement> replacements)
+        {
+            string newString;
+            using (var stream = new FileStream(documentPath, FileMode.Open, FileAccess.Read, FileShare.Read))
+            {
+                newString = new StreamReader(stream).ReadToEnd();
 
-				foreach (Replacement replacement in replacements)
-				{
-					newString = newString.Replace(replacement.OldString, replacement.NewString);
-				}
-			}
-			return newString;
-		}
+                foreach (Replacement replacement in replacements)
+                {
+                    newString = newString.Replace(replacement.OldString, replacement.NewString);
+                }
+            }
+            return newString;
+        }
 
-		internal static void RemoveAttribute(ref XmlDocument document, Attribute attribute)
-		{
-			XmlNodeList parentNodes = document.SelectNodes(attribute.ParentElementXPath);
-			if (parentNodes != null)
-			{
-				foreach (XmlNode parentNode in parentNodes)
-				{
-					if (parentNode.Attributes != null) parentNode.Attributes.RemoveNamedItem(attribute.Name);
-				}
-			}
-		}
+        internal static void RemoveAttribute(ref XmlDocument document, Attribute attribute)
+        {
+            XmlNodeList parentNodes = document.SelectNodes(attribute.ParentElementXPath);
+            if (parentNodes != null)
+            {
+                foreach (XmlNode parentNode in parentNodes)
+                {
+                    if (parentNode.Attributes != null) parentNode.Attributes.RemoveNamedItem(attribute.Name);
+                }
+            }
+        }
 
-		internal static void RemoveElements(ref XmlDocument document, string xpathToElement)
-		{
-			XmlNodeList nodesToRemove = document.SelectNodes(xpathToElement);
-			if (nodesToRemove != null)
-			{
-				foreach (XmlNode node in nodesToRemove)
-				{
-					if (node.ParentNode != null) node.ParentNode.RemoveChild(node);
-				}
-			}
-		}
-	}
+        internal static void RemoveElements(ref XmlDocument document, string xpathToElement)
+        {
+            XmlNodeList nodesToRemove = document.SelectNodes(xpathToElement);
+            if (nodesToRemove != null)
+            {
+                foreach (XmlNode node in nodesToRemove)
+                {
+                    if (node.ParentNode != null) node.ParentNode.RemoveChild(node);
+                }
+            }
+        }
+    }
 }
