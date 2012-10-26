@@ -48,27 +48,31 @@ namespace BizUnitCompare.FlatfileCompare
 		{
 			get
 			{
-				int bitmapLength = 0;
-				foreach (ExclusionPositions exclusionPosition in ExclusionPositions)
-				{
-					if (exclusionPosition.EndPosition > bitmapLength)
-					{
-						bitmapLength = exclusionPosition.EndPosition;
-					}
-				}
-
-				bool[] bitmap = new bool[bitmapLength];
-
-				foreach (ExclusionPositions exclusionPositions in ExclusionPositions)
-				{
-					for (int i = exclusionPositions.StartPosition - 1; i < exclusionPositions.EndPosition; i++)
-					{
-						bitmap[i] = true;
-					}
-				}
-
-				return bitmap;
+			    return CalculateBitmap();
 			}
 		}
+
+	    private bool[] CalculateBitmap()
+	    {
+	        int bitmapLength = 0;
+	        foreach (ExclusionPositions exclusionPosition in ExclusionPositions)
+	        {
+	            if (exclusionPosition.EndPosition > bitmapLength)
+	            {
+	                bitmapLength = exclusionPosition.EndPosition;
+	            }
+	        }
+
+	        bool[] bitmap = new bool[bitmapLength];
+
+	        foreach (ExclusionPositions exclusionPositions in ExclusionPositions)
+	        {
+	            for (int i = exclusionPositions.StartPosition - 1; i < exclusionPositions.EndPosition; i++)
+	            {
+	                bitmap[i] = true;
+	            }
+	        }
+	        return bitmap;
+	    }
 	}
 }
